@@ -1,0 +1,20 @@
+*{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    text-decoration: none;
+}
+
+.PageContainer{
+    padding: 30px;
+    border: 5px solid black;
+    height:100%;
+    width:100%;
+    background-color: salmon;
+    overflow-y: scroll;
+
+}
+
+.HideScrollbar::-webkit-scrollbar {
+    display: none;
+}
