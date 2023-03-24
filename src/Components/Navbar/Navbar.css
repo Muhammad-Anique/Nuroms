@@ -1,3 +1,4 @@
+
 *{
     box-sizing: border-box;
     padding: 0;
@@ -8,13 +9,65 @@
 .Navbar{
     width: 100%;
     height: 100vh;
-    background-color: rgb(75, 75, 134);
+    display:flex;
+    justify-content: center;
+    align-items: center;
     padding: 5px;
+   
 
 }
 
-.Nav-item{
+.Nav-Container{
+    background-color: var(--primary-color);
     color: white;
-    width: 100px;
-    height: 50px;
+    padding-top:20px;
+    padding-bottom: 20px;
+    border-radius: 20px;
+    display: grid;
+    grid-template-rows: repeat(12,1fr);
+    align-items: center;
+    justify-content: center;
+    width: 92%;
+    height: 96%;
+    box-shadow: 11px 11px 37px -1px rgba(12,5,65,0.21);
+    -webkit-box-shadow: 11px 11px 37px -1px rgba(12,5,65,0.21);
+    -moz-box-shadow: 11px 11px 37px -1px rgba(12,5,65,0.21);
+}
+
+.Nav-Item{
+    font-size: 18px;
+    width: 45px;
+    height: 45px;
+    border-radius: 100%;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--primary-color);
+}
+
+.Nav-Item:hover{
+    background-color: var(--white);
+    cursor: pointer;
+    color:var(--primary-color);
+}
+
+
+.Nav-Last-Item{
+    font-size: 18px;
+    width: 45px;
+    height: 45px;
+    border-radius: 100%;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--primary-color);
+    grid-row-start:14;
+    grid-row-end:15;
+}
+.Nav-Last-Item:hover{
+    background-color: var(--white);
+    cursor: pointer;
+    color:var(--primary-color);
 }

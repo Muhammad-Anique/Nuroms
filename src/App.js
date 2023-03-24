@@ -2,7 +2,8 @@ import logo from './logo.svg';
 import './App.css';
 import Navbar from './Components/Navbar/Navbar';
 import Section from './Components/Section/Section';
-import Page from './Components/FeaturePage/Page';
+import LoginPage from './Components/LoginPage/LoginPage';
+
 
 function App() {
   return (
@@ -10,8 +11,8 @@ function App() {
       <div className="navbar">
        <Navbar/>
       </div>
-      <div className='PageLay'>
-        <Page/>
+      <div className='LoginPageLay'>
+        <LoginPage/>      
       </div>
     </div>
   );
