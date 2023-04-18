@@ -5,15 +5,16 @@
 .col {
     margin-top: 12px;
     display: inline-block;
+    width: 100%;
     position: relative;
 }
 
 .textbox {
     border: 0;
+    width: 100%;
     padding: 2px 0;
     border-bottom: 1px solid #ccc;
     color: var(--font-color);
-    width: 275px;
     box-sizing: border-box;
     letter-spacing: 1px;
 }

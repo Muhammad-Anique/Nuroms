@@ -1,9 +1,16 @@
 :root {
   --primary-color:#3354cc;
-  --white : #FFFFFF;
+  --white : #ffffff;
   --bg-color-1: #d8dbf5;
   --bg-color-2: #cad3ea;
   --font-color:rgb(37, 37, 38);
+  --line-break-color:rgba(166, 166, 167, 0.15);
+  --name-font:black;
+  --date-font:rgb(124, 122, 122,0.9);
+  --post-font:black;
+  --roll-font:rgb(95, 93, 93);
+  --post-box: rgba(255, 255, 255, 0.73);
+
 }
 
 *{
@@ -33,6 +40,12 @@
   grid-column-end: 9;
   overflow: hidden;
 
+}
+
+.FullPageLay{
+  grid-column-start: 2;
+  grid-column-end: 9;
+  overflow: hidden;
 }
 
 

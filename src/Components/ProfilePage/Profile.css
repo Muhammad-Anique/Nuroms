@@ -1,0 +1,212 @@
+.ProfilePage{
+    display: grid;
+    grid-template-columns: 30% 30% 40%;
+    /* background-color: pink; */
+    width: 96vw;
+    height: 96vh;
+    margin:10px;
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+.ProfileOutlook{
+    /* background-color: red; */
+    grid-column-start: 1;
+    grid-column-end: 3;
+    display: grid;
+    padding: 30px;
+    grid-template-rows: 1fr 1fr;
+    overflow-y: hidden;
+}
+
+.Reviews{
+    /* background-color: yellow; */
+}
+
+.ImageContainer{
+    /* background-color: green; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ImageCircle-Outer{
+    background-image: linear-gradient( 270.3deg,  rgba(84,212,228,1) 0.2%, rgba(68,36,164,1) 100% );
+    height: 300px;
+    width: 300px;
+    border-radius: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+
+.Add-Button{
+    width: 20%;
+    height: 50%;
+    /* background-color: rgba(78, 89, 171, 0.525); */
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    position: absolute;
+    z-index: 4;
+
+}
+
+.-Btn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius:100% ;
+    margin-top: 55px;
+    margin-left: 20px;
+    background-color: purple;
+    background-image: radial-gradient( circle farthest-corner at 90.9% 49%,  rgb(219, 136, 34) 5.3%, rgb(237, 191, 53) 100.2% ); 
+}
+.-Btn:hover{
+    box-shadow: 10px 10px 39px -1px rgba(175, 111, 42, 0.415);
+-webkit-box-shadow: 10px 10px 39px -1px rgba(175, 111, 42, 0.555);
+-moz-box-shadow: 10px 10px 39px -1px rgba(175, 111, 42, 0.52);
+}
+
+#input[type=file]{
+    display: none;
+}
+
+.ImageCircle-Inner{
+   
+    background-color: rgb(219, 221, 231);
+    height: 285px;
+    width: 285px;
+    border-radius: 100%;
+    padding: 10px;
+
+}
+
+
+.round-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 100%;
+  overflow: hidden;
+}
+
+.round-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+
+.ProfileOverview{
+    width: 100%;
+    padding: 40px;  
+    /* background-color: green; */
+    display: grid;
+    grid-template-columns: 50% 50%;
+    border-radius: 27px;
+    background:rgba(255, 255, 255, 0.643);
+    box-shadow:  7px 7px 16px #c7cae388,
+                 -7px -7px 16px #deeaf79d;
+
+}
+
+.TextualInformation{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: 20px;
+    /* background-color: pink; */
+    
+}
+
+.ProName{
+    color: rgba(18, 18, 18, 0.79);
+    font-family: 'Lato', sans-serif;
+    font-size: 16px;
+    line-height: 16px;
+}
+.ProEmail{
+    font-size: 14px;
+    line-height: 14px;
+    margin-top: 24px;
+    color: rgba(14, 14, 14, 0.592);
+    font-family: 'Poppins', sans-serif;
+
+}
+
+.ProBio{
+    width: 60%;
+    font-size: 14px;
+    line-height: 14px;
+    margin-top: 15px;
+    color: rgba(14, 14, 14, 0.592);
+    font-family: 'Poppins', sans-serif;
+}
+
+
+.DivCols{
+    margin-top: 20px;
+    width: 100%;
+    height: 65px;
+    padding: 5px;
+    padding-left: 0px;
+    /* background-color: pink; */
+    display: grid;
+    column-gap: 7px;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 7%;
+
+}
+
+.Semester{
+    background-color: rgba(215, 215, 215, 0.641);
+    border-radius: 8px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.Semester>p{
+    margin-top: 3px;
+    font-size: 9px;
+}
+
+.Semester>h1{
+    font-size: 12px;
+}
+
+
+.edit-button{
+  justify-self: flex-end;
+    width: auto;
+    height: auto;
+    position: absolute;
+    z-index: 4;
+}
+
+.Pencil-button{
+    border: none;
+    color: rgba(0, 0, 0, 0.768);
+    background: transparent;
+}
+
+.Pencil-button:hover{
+    color: var(--primary-color);
+    cursor: pointer;
+}
+
+.done-button{
+    margin-top: 40px;
+    justify-self: flex-end;
+    width: auto;
+    height: auto;
+    position: absolute;
+    z-index: 4;
+}

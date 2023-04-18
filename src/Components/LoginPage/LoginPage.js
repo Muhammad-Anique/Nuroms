@@ -1,118 +1,63 @@
-import React, { useState } from 'react'
+import React from 'react'
 import './LoginPage.css'
 import './TextBox.css'
-import logo from '../../resources/Nuroms_Logo.png'
+import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { setNavigation } from  '../../store/slices/navigationSlice'
+import { setFormType } from '../../store/slices/formTypeSlice';
+import RegisterForm from './RegisterForm/RegisterForm'
+import LoginCredentials from './LoginCredentials/LoginCredentials';
+
 function LoginPage() {
 
-    const [registerForm, setRegisterForm] = useState(false);
-    const [loginForm, showLoginform] =useState(true);
+
+    const dispatch =useDispatch();
+    const FORM_TYPE = useSelector((state)=>{ return state.formtype.data })
+    const NAV = useSelector((state)=>{ return state.navigation.data })
+ 
+
+ 
+ 
+
+    // const changeNavigation = ()=>{
+
+    //     dispatch(setNavigation(1));
+    // }
 
 
 
-    const toggleForm = ()=>{
-        !registerForm ? setRegisterForm(true) : setRegisterForm(false);
+    const changeFormType = ()=>{
+
+        console.log('FormType = ',FORM_TYPE);
+        if(FORM_TYPE==0)
+        dispatch(setFormType(1));
+        else 
+        dispatch(setFormType(0));
     }
+
+
+
+
 
     const CredentialSection =()=>{
 
-        if(!registerForm){
+        if(FORM_TYPE==0){
             return(
-                <LoginCredentials/>)
+                <LoginCredentials ChangeForm = {changeFormType}/>)
 
         }else{
             return(
-                <RegisterForm/>
+                <RegisterForm   ChangeForm = {changeFormType} />
             )
         }
 
     }
 
 
-    const LoginCredentials = ()=>{
-        return(
-            <div className="LoginCrendentialArea">
-                <div className="LogoImage LogoAtEnd">
-                    <img style={{ width: 160, height:70 }} src={logo} alt="" />
-                </div>
-
-                <div className='Login-Form-Container'>
-                    <form action=""className='Login-Form'>
-                        <div className='col'>
-                            <input  className='textbox' placeholder='Username' type="text" /><span className="focus-border"></span>
-                        </div>
-                        <div className='col'>
-                            <input  className='textbox tp-mar-7' placeholder='Password' type="text" /><span className="focus-border"></span>
-                        </div>
-                        <div className="Login-Buttons">
-                        <button className="button-65 tp-mar-20" role="button">Login</button>
-                        </div>
-                    </form>
-                </div>
-
-                <div className="Register-Info">
-                    <p className='Register-Text'>Don't have an account yet?  </p>
-                    <a className='Register-Link' onClick={toggleForm} >&nbsp;Register Here</a>
-                </div>
-            </div>
-        )
-    }
-
-
-    const RegisterForm = ()=>{
-        return(
-            <div className="RegisterFormArea">
-                <div className="LogoImage LogoAtStart">
-                    <img style={{ width: 160, height:70 }} src={logo} alt="" />
-                </div>
-
-                <div className='Register-Form-Container'>
-                    <form action=""className='Register-Form'>
-                        <div className='col'>
-                            <input  className='textbox' placeholder='Name' type="text" /><span className="focus-border"></span>
-                        </div>
-
-                        <div className='col'>
-                            <input  className='textbox tp-mar-7' placeholder='Email' type="text" /><span className="focus-border"></span>
-                        </div>
-
-                        <div className='col'>
-                            <input  className='textbox tp-mar-7' placeholder='Degree' type="text" /><span className="focus-border"></span>
-                        </div>
-
-                        <div className='col'>
-                            <input  className='textbox tp-mar-7' placeholder='Phone' type="text" /><span className="focus-border"></span>
-                        </div>
-
-                        <div className='col'>
-                            <input  className='textbox tp-mar-7' placeholder='Password' type="text" /><span className="focus-border"></span>
-                        </div>
-
-                        <div className='col'>
-                            <input  className='textbox tp-mar-7' placeholder='Confirm Password' type="text" /><span className="focus-border"></span>
-                        </div>
-
-                       
-                        <div className="Login-Buttons">
-                        <button className="button-65 tp-mar-20" role="button">Register</button>
-                        </div>
-                    </form>
-                </div>
-                <div className="Login-Info">
-                <p className='Login-Text'>Already have an account? </p>
-                <a className='Login-Link' onClick={toggleForm} >&nbsp;Login Here</a>
-                </div>
-
-            
-            </div>
-        )
-    }
-
-
-
-
-
   return (
+   
     <div className='LoginBackground'>
+         {console.log('NAV',NAV)}
         <div className="LoginContainer">
             <CredentialSection/>
             <div className="LoginImage"></div>

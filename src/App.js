@@ -1,20 +1,22 @@
-import logo from './logo.svg';
 import './App.css';
 import Navbar from './Components/Navbar/Navbar';
-import Section from './Components/Section/Section';
-import LoginPage from './Components/LoginPage/LoginPage';
+
+// import { useDispatch, useSelector } from 'react-redux';
+// import { setNavigation } from  './store/slices/navigationSlice'
+// import { useState } from 'react';
+import PageSelector from './Components/PageSelector/PageSelector';
 
 
 function App() {
   return (
+    <>
     <div className='Container'>
-      <div className="navbar">
+     <div className="navbar">
        <Navbar/>
       </div>
-      <div className='LoginPageLay'>
-        <LoginPage/>      
-      </div>
+      <PageSelector/>
     </div>
+    </>
   );
 }
 
