@@ -57,7 +57,6 @@ function LoginPage() {
   return (
    
     <div className='LoginBackground'>
-         {console.log('NAV',NAV)}
         <div className="LoginContainer">
             <CredentialSection/>
             <div className="LoginImage"></div>

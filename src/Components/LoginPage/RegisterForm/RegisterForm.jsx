@@ -6,21 +6,30 @@ import { useState } from 'react'
 import { EmailCheck, RollExtract, PhoneCheck, PasswordCheck, DegreeCheck } from '../ValidityCheck'
 import { setFormType } from '../../../store/slices/formTypeSlice';
 import { useDispatch } from 'react-redux'
-
-
-
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import {image} from '../../../resources/man.jpg';
 
 
 function RegisterForm(props) {
 
- 
+    const handleCongratulation = (string) => {
+        toast.success(string, {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      };
     
 
     const dispatch =useDispatch();
 
     //userDetails
-   
+    const [activeCheckbox, setActiveCheckbox] = useState(null);
     const[Name,setName]=useState('');
     const[Email,SetEmail]  =useState('');
     const [RollNo,setRollNo]=useState('');
@@ -28,14 +37,14 @@ function RegisterForm(props) {
     const[confirmPassword,setConfirmPassword] = useState('');
     const[Phone,setPhone]=useState('');
     const[Degree,setDegree]=useState('');
-    const[UserType,setUserType]=useState('student');
+    const[UserType,setUserType]=useState(activeCheckbox);
     const[Status,setStatus]=useState('active');
     const[AccountType,setAccountType]=useState('user');
     const[OTP_, setOTP] =useState(Math.floor(Math.random() * 9000) + 1000);
 
 
 
-    const[Error, setError] = useState('hi')
+    const[Error, setError] = useState("")
    
 
 
@@ -84,6 +93,23 @@ function RegisterForm(props) {
 
     }
 
+   
+
+    const handleCheckboxChange = (e) => {
+      const checkboxName = e.target.name;
+
+      if (checkboxName === activeCheckbox) {
+        // The active checkbox was clicked again, so deactivate it
+        setActiveCheckbox(null);
+      } else {
+        // Another checkbox was clicked, so activate it and deactivate the previous one
+        setUserType(checkboxName);
+        setActiveCheckbox(checkboxName);
+      }
+
+      console.log(checkboxName);
+    };
+
 
     
 
@@ -113,27 +139,53 @@ function RegisterForm(props) {
                 'Content-Type':'application/json'
             }
             })
-
-
             const data = await response.json();
+            let imgDoc = {
+                base64:null,
+                imgHolder:data._id,
+              }
+             
+                try{
+                  const response = await fetch('http://localhost:8080/nuroms/image/add',{
+                      method:'POST',
+                      body:JSON.stringify(imgDoc),
+                      headers: {
+                          'Content-Type':'application/json'
+                      }
+                      })
+          
+                  const data = await response.json();
+                  console.log(data);
+                  
+                  // window.location.reload();
+              }catch(error)
+              {
+                  alert(error);
+              }
+
+
             if(response.status==201)
-            console.log(data);
+            {
+              setError("");
+              handleCongratulation("You have Successfully Registered");
+              setTimeout(() => {
+                dispatch(setFormType(0));
+              }, 6000);
+            }
             else
             {
-                console.log("Account Already Exist");
-                setError("Account Already Exist");
+                console.log("Account Already Exist or Network Error ");
+                setError("Account Already Exist or Network Error");
             }
            
         }
-    
 
-
-   
 
     }
   
   return (
     <div className="RegisterFormArea hs" >
+            
             <div className="LogoImage LogoAtStart">
                 <img style={{ width: 160, height:70 }} src={logo} alt="" />
             </div>
@@ -164,13 +216,45 @@ function RegisterForm(props) {
                         <input  className='textbox tp-mar-7' placeholder='Confirm Password' onChange={SettingConfirmPassword} value={confirmPassword}  type="password" /><span className="focus-border"></span>
                     </div>
 
+                    <div className='col' style={{ marginTop: 12}}>
+                        <div className='CheckBoxes'>
+                            <label className='Label1'>
+                                <input
+                               
+                                type="checkbox"
+                                name="Student"
+                                checked={activeCheckbox === 'Student'}
+                                onChange={handleCheckboxChange}
+                                />
+                                &nbsp;&nbsp;Student
+                            </label>
+                            <label className='Label1'>
+                                <input
+                                type="checkbox"
+                                name="Instructor"
+                                checked={activeCheckbox === 'Instructor'}
+                                onChange={handleCheckboxChange}
+                                />
+                                &nbsp;&nbsp;Instructor
+                            </label>
+                        </div>
+                    </div>
+
                    
                     <div className="Login-Buttons">
                     <button className="button-65 tp-mar-20" onClick={()=>{handleRegisterSubmit()}} >Register</button>
-                    </div>
+                    <style>
+                        {`
+                        .Toastify__toast-container {
+                            margin-top: 20px;
+                            margin-right: 50px;
+                        }
+                        `}
+                    </style>
+                    </div> 
 
                     <p className='LocalError'>{Error}</p>
-                   
+                    <ToastContainer />
 
                 
 

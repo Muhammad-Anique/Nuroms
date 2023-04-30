@@ -5,9 +5,11 @@ import '../TextBox.css'
 import logo from '../../../resources/Nuroms_Logo.png'
 import { useState } from 'react'
 import { setFormType } from '../../../store/slices/formTypeSlice';
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setNavigation } from '../../../store/slices/navigationSlice'
 import { setUser } from '../../../store/slices/userSlice'
+import { setIsLogin } from '../../../store/slices/loginSlice'
+
 
 const LoginCredentials = (props)=>{
 
@@ -45,6 +47,8 @@ const LoginCredentials = (props)=>{
             if(data.Email==Email)
             {
                 console.log(data);  
+                dispatch(setIsLogin(1));
+                dispatch(setIsLogin(1));
                 dispatch(setNavigation(1));
                 dispatch(setUser(data)); 
                 setIsLoading(false);

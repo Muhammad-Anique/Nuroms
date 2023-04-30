@@ -1,14 +1,25 @@
 import React, { useState } from 'react'
 import { setNavigation } from '../../store/slices/navigationSlice'
 import './Navbar.css'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setIsLogin } from '../../store/slices/loginSlice';
+import { setUser } from '../../store/slices/userSlice'
+import {FiTrello} from 'react-icons/fi'
+
 
 
 export default function Navbar() {
+
+   
     const dispatch =useDispatch();
+    // dispatch(setNavigation(0));
 
     function logout(){
+        //logout
         dispatch(setNavigation(0));
+        dispatch(setIsLogin(0));
+        dispatch(setIsLogin(0));
+        dispatch(setUser(null)); 
     }
 
     function profilePage(){
@@ -27,14 +38,16 @@ export default function Navbar() {
         dispatch(setNavigation(6));
     }
 
-  return (
-    <div>
-        <nav className='Navbar'>
-            <div className="Nav-Container">
-                <div className="Nav-Item">
-                    <span className="material-symbols-outlined">login</span>
-                </div>
-                <div className="Nav-Item" onClick={()=>{PostPage()}} >
+    function MyRequests(){
+        dispatch(setNavigation(7));
+    }
+
+    const Menu_Items= ()=>{
+        const LoginBit= useSelector((state)=>{ return state.loginbit.data });
+        if(LoginBit)
+        return(
+            <>
+              <div className="Nav-Item" onClick={()=>{PostPage()}} >
                     <span className="material-symbols-outlined"  >home</span>
                 </div>
                 <div className="Nav-Item" onClick={()=>{profilePage()}} >
@@ -46,6 +59,32 @@ export default function Navbar() {
                 <div className="Nav-Item"  onClick={()=>{CoachingService()}} >
                     <span className="material-symbols-outlined">cast_for_education</span>
                 </div>
+                <div className="Nav-Item"  onClick={()=>{MyRequests()}} >
+                  <FiTrello size={20}/>
+                </div>
+            </>
+        )
+        else
+        return(
+            <>
+            <div></div>
+            </>
+        )
+    }
+    
+
+
+   
+
+
+  return (
+    <div>
+        <nav className='Navbar'>
+            <div className="Nav-Container">
+                <div className="Nav-Item" >
+                    <span className="material-symbols-outlined">login</span>
+                </div>
+                <Menu_Items/>
                 <div className="Nav-Last-Item" onClick={()=>{logout()}} >
                     <span className="material-symbols-outlined" >logout</span>
                 </div>

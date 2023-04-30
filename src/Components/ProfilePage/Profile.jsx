@@ -20,10 +20,81 @@ export default function Profile() {
   const firstName = namesArray[0];
   const lastName = namesArray[namesArray.length - 1];
 
+  const [EditButton, setEditButton] =useState(0)
+
+  const [DegreeEdit, setDegreeEdit] = useState("BSCS");
+  const [SemesterEdit, setSemesterEdit] = useState("6th");
+  const [TypeEdit, setTypeEdit] = useState("Junior");
+  const [campus, setCampus] = useState("ISL");
+  const [SubmitBtn, setSubmitButton] =useState(0);
+
+
+
+
+
+  const Bio_Component =(props)=>{
+    // const [eVal, setEVal]= useState(props.value);
+
+    // const go=()=>{
+    //   props.func(eVal);
+    //   console.log("Had Hai = ",eVal);
+    // }
+
+    // const change=(e)=>{
+    // setEVal(e.target.value);
+    // }
+
+    if(EditButton)
+    return(
+      <div className='Wrapper'>
+       <textarea name=""  className='Bio_Area' id="" cols="30" rows="10"></textarea>
+      </div>
+        
+    )
+    else
+    return(
+      <h6>{props.value}</h6>
+    )
+  }
+
+
+  const Att_Comp =(props)=>{
+    const [eVal, setEVal]= useState(props.value);
+
+    const go=()=>{
+      props.func(eVal);
+      console.log("Had Hai = ",eVal);
+    }
+
+    const change=(e)=>{
+    setEVal(e.target.value);
+    }
+
+    if(EditButton)
+    return(
+      <div className='Wrapper'>
+        <input value={eVal} onChange={change} className='EditText_mini' type="text" /> 
+        <button className="text-input-button" onClick={()=>{go()}}><MdOutlineDoneOutline size={15} /></button>
+      </div>
+        
+    )
+    else
+    return(
+      <h1>{props.value}</h1>
+    )
+  }
+
+
+
+
+
+
+  const EditClick =()=>{
+    if(!EditButton) setEditButton(1); else setEditButton(0);
+  }
+
 
   useEffect(() => {
-
-
     const fetchData = async () => {
       const response = await fetch(`http://localhost:8080/nuroms/image/get/${UserProfile._id}`);
       const data = await response.json();
@@ -42,7 +113,6 @@ export default function Profile() {
 
     console.log(e);
     var reader = new FileReader();
-
     reader.readAsDataURL(e.target.files[0]);
     reader.onloadend =()=>{
       console.log("Hello",reader.result);
@@ -56,14 +126,30 @@ export default function Profile() {
   }
 
 
+  const changeIt1 =(val)=>{
+    setDegreeEdit(val);
+  }
+  const changeIt2 =(val)=>{
+    setSemesterEdit(val);
+  }
+  const changeIt3 =(val)=>{
+    setTypeEdit(val);
+  }
+  const changeIt4 =(val)=>{
+    setCampus(val);
+  }
+
  const uploadButton = async ()=> {
 
-
+   if(SubmitBtn) setSubmitButton(0); else {setSubmitButton(1); setEditButton(0)};
    console.log("Anique", image);
     let imgDoc = {
       base64:image,
       imgHolder:UserProfile._id,
     }
+
+    console.log("UFF ALAH")
+    console.log(imgDoc);
    
       try{
         const response = await fetch('http://localhost:8080/nuroms/image/put',{
@@ -98,27 +184,25 @@ export default function Profile() {
                 <h4>{UserProfile.Email}</h4>
               </div>
               <div className="ProBio">
-                <h6>Adolf Hitler was a Gerrmany in 1933. Hitler's aggressive expansionist posponsible for the genocide s of others during the Holocaust. </h6>
+                <Bio_Component value={`Adolf Hitler was a Gerrmany in 1933. Hitler's aggressive expansionist posponsible for the genocide s of others during the Holocaust. `}/>
               </div>
 
               <div className='DivCols'>
                 <div className='Semester'>
-                  <h1>BSCS</h1>
+                  <Att_Comp value={DegreeEdit} func={changeIt1}/>
                   <p>Degree</p>
-
-
                 </div>
                 <div className='Semester'>
-                <h1>6th</h1>
+                <Att_Comp value={SemesterEdit} func={changeIt2}/>
                   <p>Semester</p>
 
                 </div>
                 <div className='Semester'>
-                  <h1>Junior</h1>
+                <Att_Comp value={TypeEdit} func={changeIt3}/>
                   <p>Type</p>
                 </div>
                 <div className='Semester'>                 
-                  <h1>LHR</h1>
+                <Att_Comp value={campus} func={changeIt4}/>
                   <p>Campus</p>
                 </div>
                
@@ -141,7 +225,7 @@ export default function Profile() {
               </label>
             </div>
             <div className='edit-button'>
-          <button className='Pencil-button'><FaPencilAlt size={25} /></button>
+          <button className='Pencil-button' onClick={()=>{EditClick()}}><FaPencilAlt size={25} /></button>
            </div>
 
            <div className='done-button'>

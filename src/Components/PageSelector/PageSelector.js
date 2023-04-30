@@ -7,6 +7,7 @@ import { useState } from 'react';
 import PostPage from '../PostPage/PostPage';
 import Profile from '../ProfilePage/Profile';
 import CreateRequestPage from '../CreateRequestPage/CreateRequestPage'
+import MyCoachingRequest from '../MyRequests/MyCoachingRequest';
 
 import ViewCoachings from '../ViewCoachingServices/ViewCoachings';
 function PageSelector() {
@@ -47,6 +48,13 @@ function PageSelector() {
           return(
             <div className="FullPageLay">
               <CreateRequestPage/>
+            </div>
+          )
+        }
+        else if(data==7){
+          return(
+            <div className="FullPageLay">
+              <MyCoachingRequest/>
             </div>
           )
         }
