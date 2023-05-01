@@ -13,22 +13,7 @@ function MyCoachingRequest() {
   
     const UserProfile = useSelector((state)=>{ return state.user.data })
 
-
-    // useEffect(() => {
-    // async function fetchData() {
-    //   try {
-    //     const response = await fetch(`http://localhost:8080/nuroms/request/get-owner/6426d0294ad2a77dfe8bc9d2`);
-    //     const json = await response.json();
-    //     console.log(json);
-    //   } catch (error) {
-    //     console.error(error);
-    //   }
-    // }
-
-    // fetchData();
-    // }, []);
-
-   const [data1, setData1] =useState([]);
+ 
 
    const [data, setData] = useState([]);
    useEffect(() => {
@@ -46,6 +31,26 @@ function MyCoachingRequest() {
       .catch((error) => {
       });
   }, []);
+
+
+
+  const [data2, setData2] = useState([]);
+  useEffect(() => {
+   fetch(`http://localhost:8080/nuroms/request/get-ins/${UserProfile._id}`)
+     .then((response) => {
+       if (!response.ok) {
+         throw new Error("Failed to fetch data");
+       }
+       return response.json();
+     })
+     .then((data) => {
+       setData2(data);
+     
+     })
+     .catch((error) => {
+     });
+ }, []);
+
 
 
     const [rcvBtn, setRcvBtn] = useState(0);
@@ -146,19 +151,45 @@ function MyCoachingRequest() {
             <div className="Filter-Options">
               <button className={`Flt-Btn ${ac1}`}  onClick={()=>{handleCoachAll()}}  ><BsGridFill size={20}/></button>
               <div className='Bt-sp'></div>
-              <button className={`Flt-Btn ${ac2}`}   onClick={()=>{handleCoachSent()}} >Sention Request Sent</button>
+              <button className={`Flt-Btn ${ac2}`}   onClick={()=>{handleCoachSent()}} >Sent Request Sent</button>
               <div className='Bt-sp'></div>
-              <button className={`Flt-Btn ${ac3}`}   onClick={()=>{handleCoachRcv()}}  >Sention Request Recieved</button>
+              <button className={`Flt-Btn ${ac3}`}   onClick={()=>{handleCoachRcv()}}  >Recieved Request</button>
+              <div className='Bt-sp'></div>
+              <button className={`Flt-Btn`}>Participation Request</button>
             </div>
           </div>
   
         </div>
         <div className="Scrollable_Service_Container">  
-        {data.map(val=>{
+       
+        { data.map(val=>{
+              if(sentbtn==1 && data.length>0)
               return(
-                  <CoachingRequest key={val._id} val={val}/> 
+                  <CoachingRequest key={val._id} val={val} bit={1}/> 
               )
-        })}
+              else if(sentbtn==1 && data.length==0)
+              return(
+                  <h1>No request Sent</h1> 
+              )
+             })
+        }
+        
+        { data2.map(val=>{
+              if(rcvBtn==1 && data2.length>0)
+              return(
+                  <InActiveCoachingRequest  key={val._id} val={val} /> 
+              )
+              else if(rcvBtn==1 && data2.length==0)
+              return(
+                <h1>No Reuest Recieved</h1>
+              )
+
+
+             })
+        }
+
+
+    
         </div>
       </div>
       

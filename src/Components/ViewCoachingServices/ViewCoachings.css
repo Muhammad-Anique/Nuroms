@@ -4,7 +4,7 @@
     margin-top: 20px;
     /* background-color: pink; */
     display: grid;
-    grid-template-columns: 70% 30%;
+    grid-template-columns: 90% 5%;
 }
 
 .Coaching-Request-Container{
@@ -44,7 +44,7 @@ background-image: linear-gradient(62deg, #FBAB7E 0%, #F7CE68 100%);
 
 .RequestContainer{
     display: grid;
-    grid-template-columns: 3.5% 30% 0.2% 36% 0.2%  30%;
+    grid-template-columns: 3.5% 22% 0.2% 30% 0.2%  22% 0.2% 22%;
 
 
 
@@ -120,9 +120,9 @@ background-image: linear-gradient(62deg, #FBAB7E 0%, #F7CE68 100%);
 
 .RequestContainer-2{
 
-    background:rgba(255, 255, 255, 0.798);
-    box-shadow:  7px 7px 16px #c7cae388,
-                 -7px -7px 16px #deeaf79d;
+    background:rgba(255, 255, 255, 0.346);
+    box-shadow:  7px 7px 16px #c7cae32f,
+                 -7px -7px 16px #deeaf728;
     border-radius:20px ;
     width: 100%;
     height: 240px;

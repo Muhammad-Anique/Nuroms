@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import '../ViewCoachingServices/ViewCoachings.css'
+import './CoachingRequest.css'
 import image from '../../resources/man.jpg'
 import PictureFrame from '../../PictureRoundFrame/PictureFrame'
 
 
 function CoachingRequest(props) {
-
 
   const isoDateString = props.val.DateCreated;
   const date = new Date(isoDateString);
@@ -30,6 +30,51 @@ function CoachingRequest(props) {
 
   const [reqOwner,setReqOwner]  =useState({});
   const [instructor, setInstructor] =useState({});
+  const [ParticipantData, setP_Data] =useState(0);
+
+
+  function Accpetence_Check_Component(){
+    if(props.val.Status=="Active")
+    return(
+      <p className='Acceptence_Message'>Your Request Is being Accepted wait for Instructor to generate link</p>
+    )
+    else
+    return(
+      <button className='Enroll-button'>Cancel Request</button>
+
+    )
+  }
+
+
+
+  function Request_Component_For_Owner(){
+    if(props.bit==0)
+    return(
+
+      <div className="RequestContainer-2">
+        <div className="Det">
+          <div className="Buy">
+          <h1>Rs. {props.val.BiddingPrice}/-</h1><p>Per Student</p>
+          </div>
+        
+        </div>
+        <button className='Enroll-button'>Enroll Now</button>
+      </div>
+
+    )
+    else if(props.bit==1)
+    return(
+      <div className="RequestContainer-2">
+      <div className="Det">
+        <div className="Buy">
+        <h1>Rs. {props.val.BiddingPrice}/-</h1><p>Per Student</p>
+        </div>
+      </div>
+      < Accpetence_Check_Component/>
+    </div>
+    )
+
+  }
 
 
 
@@ -51,6 +96,19 @@ function CoachingRequest(props) {
           console.error(error);
         }
 
+
+        try{
+          const ParticipationResponse = await fetch(`http://localhost:8080/nuroms/participation/get/${props.val._id}}`);
+          const participants = await ParticipationResponse.json();
+          if(participants.length>0)
+          setP_Data(participants.length);
+        }
+        catch(error){
+          console.error(error);
+        }
+
+
+
       } catch (error) {
         console.error(error);
       }
@@ -69,15 +127,15 @@ function CoachingRequest(props) {
 
         console.log("Ins",instructor);
 
-        // try{
-        //   const ImgResponse = await fetch(`http://localhost:8080/nuroms/image/get/${instructor._id}`);
-        //   const img = await ImgResponse.json();
-        //   if(img.Image!=null)
-        //   setInsImage(img.Image);
-        // }
-        // catch(error){
-        //   console.error(error);
-        // }
+        try{
+          const ImgResponse = await fetch(`http://localhost:8080/nuroms/image/get/${instructor._id}`);
+          const img = await ImgResponse.json();
+          if(img.Image!=null)
+          setInsImage(img.Image);
+        }
+        catch(error){
+          console.error(error);
+        }
 
       } catch (error) {
         console.error(error);
@@ -165,12 +223,12 @@ function CoachingRequest(props) {
                 </div>
                 <div className="Sp"> </div>
                 <div className="child-div">
-                  <h2> Active </h2>
+                  <h2> {props.val.Status} </h2>
                   <p> Status </p>
                 </div>
               </div>
               <div className="inner-div-1">
-                <p className='Big-Num'>10</p>
+                <p className='Big-Num'>{ParticipantData}</p>
                 <p className='little-text'>Students</p>
               </div>
             </div>
@@ -193,21 +251,12 @@ function CoachingRequest(props) {
           </div>
 
 
-        </div>
-      </div>
 
-
-      <div className="Coaching-Request-Container-2">
-        <div className="RequestContainer-2">
-            <div className="Det">
-             
-
-              <div className="Buy">
-              <h1>Rs. {props.val.BiddingPrice}/-</h1><p>Per Student</p>
-              </div>
-           
+          <div className='Separator'>
+            <div className="Sp-line">
             </div>
-            <button className='Enroll-button'>Enroll Now</button>
+          </div>
+          <Request_Component_For_Owner/>
         </div>
       </div>
     </div>

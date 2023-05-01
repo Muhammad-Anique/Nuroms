@@ -1,0 +1,9 @@
+.Acceptence_Message{
+    background-color: var(--primary-color);
+    padding: 10px;
+    border-radius: 9px;
+    color: white;
+    font-size: 11px;
+    margin: 20px;
+
+}

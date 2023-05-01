@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setIsLogin } from '../../store/slices/loginSlice';
 import { setUser } from '../../store/slices/userSlice'
 import {FiTrello} from 'react-icons/fi'
+import {SlBell} from 'react-icons/sl'
 
 
 
@@ -41,6 +42,9 @@ export default function Navbar() {
     function MyRequests(){
         dispatch(setNavigation(7));
     }
+    function NotificationBox(){
+        dispatch(setNavigation(8));
+    }
 
     const Menu_Items= ()=>{
         const LoginBit= useSelector((state)=>{ return state.loginbit.data });
@@ -61,6 +65,9 @@ export default function Navbar() {
                 </div>
                 <div className="Nav-Item"  onClick={()=>{MyRequests()}} >
                   <FiTrello size={20}/>
+                </div>
+                <div className="Nav-Item"  onClick={()=>{NotificationBox()}} >
+                  <SlBell size={20}/>
                 </div>
             </>
         )

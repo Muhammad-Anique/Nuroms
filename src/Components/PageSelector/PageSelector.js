@@ -10,6 +10,7 @@ import CreateRequestPage from '../CreateRequestPage/CreateRequestPage'
 import MyCoachingRequest from '../MyRequests/MyCoachingRequest';
 
 import ViewCoachings from '../ViewCoachingServices/ViewCoachings';
+import NotificationBox from '../NotificationBox/NotificationBox';
 function PageSelector() {
     const dispatch = useDispatch();
 
@@ -55,6 +56,13 @@ function PageSelector() {
           return(
             <div className="FullPageLay">
               <MyCoachingRequest/>
+            </div>
+          )
+        }
+        else if(data==8){
+          return(
+            <div className="FullPageLay">
+              <NotificationBox/>
             </div>
           )
         }

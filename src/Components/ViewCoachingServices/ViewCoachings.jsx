@@ -5,10 +5,15 @@ import PictureFrame from '../../PictureRoundFrame/PictureFrame'
 import CoachingRequest from '../CoachingRequest/CoachingRequest'
 import InActiveCoachingRequest from '../InActiveCoachingRequest/InActiveCoachingRequest'
 import {BsGridFill} from 'react-icons/bs'
+import { useSelector } from 'react-redux'
+
+
+
 
 function ViewCoachings() {
-
+  const UserProfile = useSelector((state)=>{ return state.user.data })
   const [ data, setData]  =useState([]);
+  const [data2, setData2] =useState([]);
   const [reqBtn, setReqBtn] = useState(0);
   const [allBtn, setAllBtn] = useState(0);
   const [sessbtn, setSessBtn] = useState(0);
@@ -98,13 +103,34 @@ function ViewCoachings() {
   }
 
 
+    useEffect(() => {
+      async function fetchData() {
+        try {
+          const response = await fetch('http://localhost:8080/nuroms/request/get-public-active');
+          const json = await response.json();
+          console.log("JSON Data2  = ",json);
+          const updatedUsers = json.filter(user => user.RequestOwner !== UserProfile._id).filter(user => user.Instructor !== UserProfile._id);
+          console.log("Updated Data 2", updatedUsers);
+          setData2(updatedUsers);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      fetchData();
+    }, []);
+
+
 
     useEffect(() => {
       async function fetchData() {
         try {
-          const response = await fetch('http://localhost:8080/nuroms/request/get-all');
+          const response = await fetch('http://localhost:8080/nuroms/request/get-public-inactive');
           const json = await response.json();
-          setData(json);
+          console.log("JSON = ",json);
+          const updatedUsers = json.filter(user => user.RequestOwner !== UserProfile._id);
+          console.log("Updated", updatedUsers);
+          setData(updatedUsers);
         } catch (error) {
           console.error(error);
         }
@@ -130,12 +156,29 @@ function ViewCoachings() {
       </div>
       <div className="Scrollable_Service_Container">
 
-        {/* {data.map(val=>{
+        {data2.map(val=>{
+              if(sessbtn==1 && data2.length>0)
               return(
-                  <CoachingRequest key={val._id} val={val}/> 
+                  <CoachingRequest key={val._id} val={val} bit={0}/> 
               )
-        })} */}
-        <InActiveCoachingRequest/>
+              else if(sessbtn==1 && data2.length==0)
+              return(
+                <h1>No Puclic Requests</h1>
+              )
+        })}
+
+
+        {data.map(val=>{
+              if(reqBtn==1 && data.length>0)
+              return(
+                  <InActiveCoachingRequest key={val._id} val={val}/> 
+              )
+              else if(reqBtn==1 && data.length==0)
+              return(
+                <h1>No Puclic Requests   {console.log("hi")}</h1>
+              )
+        })}
+
 
       </div>
     </div>

@@ -83,7 +83,7 @@ function CreateRequestPage() {
     const [sessionType, setSessionType]=useState(0);
     const [biddingPrice, setBiddingPrice]=useState(500);
     const [requestOwner, setRequetOwner]=useState(UserProfile._id);
-    const [Instructor, setInstructor]=useState("");
+    const [Instructor, setInstructor]=useState("All");
     const [status,setStatus] =useState("InActive");
 
 
@@ -102,7 +102,7 @@ function CreateRequestPage() {
 
     const HandleVisibility1 = () =>{
         if(active1==0){
-        setActive1(1);
+        setActive1(1);//private
         setVisibility(1);
         setActive2(0);}  
       
@@ -119,7 +119,7 @@ function CreateRequestPage() {
     
         if(active2==0){
         setActive1(0);
-        setVisibility(0);
+        setVisibility(0);//public
         setActive2(1);}  
     }
 
@@ -220,6 +220,8 @@ function CreateRequestPage() {
             Status : status
         }
 
+        console.log("Request",Request);
+
 
         try{
 
@@ -261,6 +263,7 @@ function CreateRequestPage() {
       {
         setInsName("All");
         setInsEmail("Request to All ") 
+        setInstructor("All");
       }
     }
 
