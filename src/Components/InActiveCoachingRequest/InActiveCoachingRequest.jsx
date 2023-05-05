@@ -17,10 +17,9 @@ function InActiveCoachingRequest(props) {
 
     const UserProfile = useSelector((state)=>{ return state.user.data })
     const [IsConterActive, setIsCounterActive] = useState(true); 
+    const [P_Data, setP_Data] =useState(0);
 
    
-    const [counterMsg, setCounterMsg] =useState('');
-    const [counterPrice, setCounterPrice]=useState('');
    
 
     const [meetTime, setMeetTime]  =useState('');
@@ -37,20 +36,6 @@ function InActiveCoachingRequest(props) {
     };
 
   
-
-    const handlePriceChange = (e)=>{
-
-        setCounterPrice(e.target.value);
-    }
-
-    const handleMessageChange = (e)=>{
-        setCounterMsg(e.target.value);
-
-    }
-
-    const handleCounterOfferSubmittion = async()=>{
-
-    }
 
     const handleCongratulation = (string) => {
       toast.success(string, {
@@ -85,7 +70,7 @@ function InActiveCoachingRequest(props) {
       }
   
       try{
-          const response = await fetch('http://localhost:8080/nuroms/request/put-status/ins',{
+            const response = await fetch('http://localhost:8080/nuroms/request/put-status/ins',{
             method:'PUT',
             body:JSON.stringify(upReq),
             headers: {
@@ -95,6 +80,29 @@ function InActiveCoachingRequest(props) {
             handleCongratulation("The Request is Accepted");
             const data = await response.json();
             console.log(data);  
+            
+            
+           
+
+
+              let notification ={
+                recieverId : reqOwner._id,
+                senderId :  UserProfile._id,
+                meetingLink :null,
+                coachingTopic : firstHalf + ' ' + secondHalf,
+                text : `${UserProfile.Name} has accepted your Session Request`
+               }
+          
+                const response2 = await fetch('http://localhost:8080/nuroms/notification/add',{
+                method:'POST',
+                body:JSON.stringify(notification),
+                headers: {
+                    'Content-Type':'application/json'
+                }
+                })
+                const data2 = await response2.json();
+
+
           }
           catch(error)
           {
@@ -138,18 +146,23 @@ function InActiveCoachingRequest(props) {
         const response = await fetch(`http://localhost:8080/nuroms/user/get/id/${props.val.RequestOwner}`);
         const json = await response.json();
         setReqOwner(json);
-        console.log(reqOwner);
 
-        try{
-          const ImgResponse = await fetch(`http://localhost:8080/nuroms/image/get/${reqOwner._id}`);
-          const img = await ImgResponse.json();
-          if(img.Image!=null)
-          setOwnerImage(img.Image);
-        }
-        catch(error){
-          console.error(error);
-        }
 
+       
+          try{
+            const ImgResponse = await fetch(`http://localhost:8080/nuroms/image/get/${json._id}`);
+            const img = await ImgResponse.json();
+            console.log("AYI HAI IMAGE 2 = ",img);
+            if(img.Image==null){
+              setOwnerImage(image);
+            }
+            else
+            setOwnerImage(img.Image);
+          }
+          catch(error){
+            console.error(error);
+          }
+     
       } catch (error) {
         console.error(error);
       }
@@ -159,24 +172,45 @@ function InActiveCoachingRequest(props) {
   }, []);
 
 
+  useEffect(async()=>{
+    try{
+      const ParticipationResponse = await fetch(`http://localhost:8080/nuroms/participation/get/${props.val._id}`);
+      const participants = await ParticipationResponse.json();
+      if(participants.length>0)
+      setP_Data(participants.length);
+    }
+    catch(error){
+      console.error(error);
+    }
+
+  },[])
+
   useEffect(() => {
     async function fetchData() {
       try {
         const response = await fetch(`http://localhost:8080/nuroms/user/get/id/${props.val.Instructor}`);
         const json = await response.json();
         setInstructor(json);
-
         console.log("Ins",instructor);
 
-        try{
-          const ImgResponse = await fetch(`http://localhost:8080/nuroms/image/get/${instructor._id}`);
-          const img = await ImgResponse.json();
-          if(img.Image!=null)
-          setInsImage(img.Image);
-        }
-        catch(error){
-          console.error(error);
-        }
+
+          try{
+            const ImgResponse = await fetch(`http://localhost:8080/nuroms/image/get/${json._id}`);
+            const img = await ImgResponse.json();
+            console.log("AYI HAI IMAGE 3 = ",img);
+            if(img.Image==null){
+              setInsImage(image);
+            }
+            else
+            setInsImage(img.Image);
+            
+          }
+          catch(error){
+            console.error(error);
+          }
+          
+      
+       
 
       } catch (error) {
         console.error(error);
@@ -209,6 +243,17 @@ function InActiveCoachingRequest(props) {
 
 
   const Counter_Link_Generator_Conditional_Component = ()=>{
+
+    const [isOpen2, setIsOpen2] = useState(false);
+
+    const handleOpenModal2 = () => {
+      setIsOpen2(true);
+    };
+
+    const handleCloseModal2 = () => {
+      setIsOpen2(false);
+    };
+
     const [isChecked, setIsChecked] = useState(false);
     const [disabling, setdisabling] =useState('disable-bg');
     const handleCheckboxChange = (event) => {
@@ -218,6 +263,58 @@ function InActiveCoachingRequest(props) {
       else
       setdisabling('disable-bg')
     }
+
+    const [counterMsg, setCounterMsg] =useState('');
+      const [counterPrice, setCounterPrice]=useState('');
+      const handlePriceChange = (e)=>{
+
+        setCounterPrice(e.target.value);
+      }
+
+      const handleMessageChange = (e)=>{
+          setCounterMsg(e.target.value);
+
+      }
+
+      const NotifyLink = async() =>{
+
+      }
+
+      const [timeit,settimeit] =useState(0);
+
+      const handleChangeTime = (e) =>{
+        settimeit(e.target.value);}
+
+      const handleCounterOfferSubmittion = async()=>{
+    
+         
+          let notification ={
+            recieverId : reqOwner._id,
+            senderId :  UserProfile._id,
+            meetingLink :null,
+            meetingTime :null,
+            meetingDate :null,
+            coachingTopic : firstHalf +' '+ secondHalf,
+            coachingId : null,
+            text : `${UserProfile.Name} has sent you a counter offer. MSG :  ${counterMsg}. CounterPrice :  ${counterPrice}`
+           }
+          
+          
+           const response2 = await fetch('http://localhost:8080/nuroms/notification/add',{
+            method:'POST',
+            body:JSON.stringify(notification),
+            headers: {
+                'Content-Type':'application/json'
+            }
+            })
+  
+            const data2 = await response2.json();
+            handleCongratulation("Counter offer Sent Successfully")
+
+      }
+
+
+
     if(props.val.Status=="Active"){
       return(
         <div className='Counter_Offer'>
@@ -230,17 +327,60 @@ function InActiveCoachingRequest(props) {
               <div className={`Setting_Offer_Attribute`}>
                   <div className='Setter_Attribute'>
                       <p>Set Time: </p>
-                      <input   className='Time_box'  type="time" id="t" placeholder='time' />
+                      <input   className='Time_box' value={timeit} onChange={handleChangeTime} type="time" id="t" placeholder='time' />
                   </div>
                   <textarea   placeholder='Write Message' className='TextArea_Counter' name="" id="" cols="30" rows="2"></textarea>
-                  <button  className={`Counter_button`}>Generate Link</button>
+                  <button  className={`Counter_button`} onClick={handleOpenModal2} >Generate Link</button>
+                  <Modal
+                  isOpen={isOpen2}
+                  onRequestClose={handleCloseModal2}
+                  contentLabel="Example Modal"
+                  style={{
+                    overlay: {
+                      backgroundColor: 'rgba(0, 0, 0, 0.5)'
+                    },
+                    content: {
+                      backgroundColor: '#fff',
+                      borderRadius: '10px',
+                      padding:'0px',
+                      width: '450px',
+                      height: '200px',
+                      margin: 'auto'
+                    }
+                  }}
+                >
+
+                  <div className="Modal_Container">
+                    <div className='Modal_heading'></div>
+                    <div className="Modal_Content">
+                    <h2>Meeting Link</h2>
+                     <a href="">http//:google meet / 3lid 3oik d3oi3 odid o 3oi 3do3idm</a> 
+                  
+                    </div>
+                    <div className="Modal_Button">
+                      <button className='Modal_Yes' onClick={()=>{NotifyLink()}}>Send Link</button>
+                      <button className='Modal_No' onClick={handleCloseModal2}>Close</button>
+                    </div>
+                    <style>
+                    {`
+                        .Toastify__toast-container {
+                            margin-top: 5px;
+                            margin-right: 30px;
+                        }
+                    `}
+                    </style>
+
+                    <ToastContainer />
+                  </div>
+              
+            </Modal>
               </div>
           </div>
         </div>
         )
 
     }
-    else if(props.val.Status=="InActive"){
+    else if(props.val.Status=="InActive"){  
       
       return(
       <div className='Counter_Offer'>
@@ -257,7 +397,7 @@ function InActiveCoachingRequest(props) {
                     <input disabled={!isChecked} value={counterPrice} onChange={handlePriceChange} className='TextBox_Counter' type="number" id="t" placeholder='Rs 0.00/-' />
                 </div>
                 <textarea  disabled={!isChecked} value={counterMsg} onChange={handleMessageChange} placeholder='Write Message' className='TextArea_Counter' name="" id="" cols="30" rows="2"></textarea>
-                <button  disabled={!isChecked} className={`Counter_button`}>Counter Offer</button>
+                <button  disabled={!isChecked} className={`Counter_button`}  onClick={handleCounterOfferSubmittion}>Counter Offer</button>
             </div>
         </div>
       </div>
@@ -330,7 +470,7 @@ function InActiveCoachingRequest(props) {
                 </div>
               </div>
               <div className="inner-div-1">
-                <p className='Big-Num'>10</p>
+                <p className='Big-Num'>{P_Data}</p>
                 <p className='little-text'>Students</p>
               </div>
             </div>

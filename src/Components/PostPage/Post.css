@@ -76,6 +76,12 @@
 }
 
 
+.bt-UpVoted-By-User{
+    color:var(--primary-color);
+    font-weight: 450;
+}
+
+
 
 .bt-comment{
     background-color: transparent;

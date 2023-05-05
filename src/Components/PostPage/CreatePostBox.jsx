@@ -20,7 +20,7 @@ function CreatePostBox(props) {
         const fetchData = async () => {
           const response = await fetch(`http://localhost:8080/nuroms/image/get/${UserProfile._id}`);
           const data = await response.json();
-          if(data==null)
+          if(data.Image==null)
           setImage(image1);
           else
           setImage(data.Image);
@@ -35,7 +35,7 @@ function CreatePostBox(props) {
         const isoDate = currentDate.toISOString();
         console.log("Profiel = ",UserProfile);
         let Post = {
-            AuthorRoll: UserProfile.RollNo,
+            AuthorRoll: UserProfile._id,
             Date: isoDate,
             PostText: value,
             Priority: `${-9}`,

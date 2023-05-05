@@ -54,11 +54,11 @@ function MyCoachingRequest() {
 
 
     const [rcvBtn, setRcvBtn] = useState(0);
-    const [allBtn, setAllBtn] = useState(0);
+    const [allBtn, setAllBtn] = useState(1);
     const [sentbtn, setSentBtn] = useState(0);
   
   
-    const [ac1,setAc1] =useState('')
+    const [ac1,setAc1] =useState('Flt-Active')
     const [ac2,setAc2] =useState('')
     const [ac3,setAc3] =useState('')
   
@@ -163,7 +163,7 @@ function MyCoachingRequest() {
         <div className="Scrollable_Service_Container">  
        
         { data.map(val=>{
-              if(sentbtn==1 && data.length>0)
+              if((sentbtn==1 || allBtn==1) && data.length>0)
               return(
                   <CoachingRequest key={val._id} val={val} bit={1}/> 
               )
@@ -175,7 +175,7 @@ function MyCoachingRequest() {
         }
         
         { data2.map(val=>{
-              if(rcvBtn==1 && data2.length>0)
+              if((rcvBtn==1 || allBtn==1)  && data2.length>0)
               return(
                   <InActiveCoachingRequest  key={val._id} val={val} /> 
               )

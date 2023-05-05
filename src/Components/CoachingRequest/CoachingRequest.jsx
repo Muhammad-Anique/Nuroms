@@ -3,6 +3,8 @@ import '../ViewCoachingServices/ViewCoachings.css'
 import './CoachingRequest.css'
 import image from '../../resources/man.jpg'
 import PictureFrame from '../../PictureRoundFrame/PictureFrame'
+import Modal from 'react-modal';
+import { ToastContainer, toast } from 'react-toastify';
 
 
 function CoachingRequest(props) {
@@ -34,13 +36,158 @@ function CoachingRequest(props) {
 
 
   function Accpetence_Check_Component(){
+
+    const [isOpen, setIsOpen] = useState(false);
+    const [chngBid,setchngBid] =useState('');
+
+    const handleOpenModal = () => {
+      setIsOpen(true);
+    };
+
+    const handleCloseModal = () => {
+      setIsOpen(false);
+    };
+
+
+    const handleCancel = async ()=>{
+      fetch(`http://localhost:8080/nuroms/request/delete/${props.val._id}`, {
+        method: 'DELETE'
+      })
+      .then(res => {
+        alert("Request is Cancelled");
+        handleCongratulation("Your Request is Cancelled Successfully");
+        setTimeout(() => {
+          window.location.reload()
+      }, 4000);
+        console.log(res);
+      })
+      .catch(err => {
+        console.error(err);
+      });
+
+     
+
+    }
+
+    const handleChangePrice = async ()=>{
+
+      try {
+
+        let upReq ={
+          id : props.val._id,
+          BiddingPrice : chngBid,
+
+        }
+
+        const response = await fetch('http://localhost:8080/nuroms/request/put/price',{
+          method:'PUT',
+          body:JSON.stringify(upReq),
+          headers: {
+              'Content-Type':'application/json'
+          }
+          })
+          handleCongratulation("The Request is Updated Successfully");
+          setTimeout(() => {
+            window.location.reload()
+          }, 4000);
+          const data = await response.json();
+          console.log(data);  
+
+        
+      } catch (error) {
+        
+      }
+
+
+    }
+
+    
+    const handleCongratulation = (string) => {
+      toast.success(string, {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    };
+
+    const handleFailure = (string) => {
+    toast.error(string, {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    });
+    };
+
+
+    const handleChng =(e)=>{
+      setchngBid(e.target.value);
+    }
+
+
     if(props.val.Status=="Active")
     return(
       <p className='Acceptence_Message'>Your Request Is being Accepted wait for Instructor to generate link</p>
     )
     else
     return(
-      <button className='Enroll-button'>Cancel Request</button>
+      <div style={{display : "flex", flexDirection : "row", width : "100%"}}>
+      <button className='Enroll-button' onClick={handleCancel}>Cancel</button>
+      <button className='Enroll-button' style={{marginLeft: "10px"}} onClick={handleOpenModal} >Edit</button>
+      <Modal
+              isOpen={isOpen}
+              onRequestClose={handleCloseModal}
+              contentLabel="Example Modal"
+              style={{
+                overlay: {
+                  backgroundColor: 'rgba(0, 0, 0, 0.5)'
+                },
+                content: {
+                  backgroundColor: '#fff',
+                  borderRadius: '10px',
+                  padding:'0px',
+                  width: '450px',
+                  height: '270px',
+                  margin: 'auto'
+                }
+              }}
+            >
+
+              <div className="Modal_Container">
+                <div className='Modal_heading'></div>
+                <div className="Modal_Content">
+                <h2>Edting Request</h2>
+                <p>Enter the Updated Bidding Price in the following box </p><br />
+                <input type="text" placeholder='Enter' className='chnge-bid-box' onChange={handleChng} value={chngBid} />
+                <br />
+              
+                </div>
+                <div className="Modal_Button">
+                  <button className='Modal_Yes' onClick={()=>{handleChangePrice()}}>Update</button>
+                  <button className='Modal_No' onClick={handleCloseModal}>Close</button>
+                </div>
+                <style>
+                {`
+                    .Toastify__toast-container {
+                        margin-top: 5px;
+                        margin-right: 30px;
+                    }
+                `}
+                </style>
+
+                <ToastContainer />
+              </div>
+              
+            </Modal>
+      </div>
+      
 
     )
   }
@@ -87,20 +234,29 @@ function CoachingRequest(props) {
         console.log(reqOwner);
 
         try{
-          const ImgResponse = await fetch(`http://localhost:8080/nuroms/image/get/${reqOwner._id}`);
+          const ImgResponse = await fetch(`http://localhost:8080/nuroms/image/get/${json._id}`);
           const img = await ImgResponse.json();
-          if(img.Image!=null)
+          console.log("AYI HAI IMAGE = ",img);
+          console.log();
+          console.log();
+          console.log();
+          if(img.Image==null){}
+          else
           setOwnerImage(img.Image);
         }
         catch(error){
           console.error(error);
         }
+          
 
+       
 
         try{
-          const ParticipationResponse = await fetch(`http://localhost:8080/nuroms/participation/get/${props.val._id}}`);
+          const ParticipationResponse = await fetch(`http://localhost:8080/nuroms/participation/get/${props.val._id}`);
           const participants = await ParticipationResponse.json();
-          if(participants.length>0)
+          alert(participants.length);
+          console.log("PALO PALO = ",participants);
+          if(participants.length>=0)
           setP_Data(participants.length);
         }
         catch(error){
@@ -128,9 +284,10 @@ function CoachingRequest(props) {
         console.log("Ins",instructor);
 
         try{
-          const ImgResponse = await fetch(`http://localhost:8080/nuroms/image/get/${instructor._id}`);
+          const ImgResponse = await fetch(`http://localhost:8080/nuroms/image/get/${json._id}`);
           const img = await ImgResponse.json();
-          if(img.Image!=null)
+          if(img.Image==null){}
+          else
           setInsImage(img.Image);
         }
         catch(error){

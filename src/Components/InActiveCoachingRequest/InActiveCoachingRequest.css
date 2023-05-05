@@ -132,6 +132,11 @@
     margin-top: 10px;
 }
 
+.Counter_button:hover{
+    background-color: rgb(50, 50, 211);
+    cursor: pointer;
+}
+
 .mg{
     margin-top:10px ;
 }

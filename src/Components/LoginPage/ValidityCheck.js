@@ -1,3 +1,14 @@
+function isValidNUEmail(email) {
+    const allowedDomains = ['lhr.nu.edu.pk', 'khi.nu.edu.pk', 'isl.nu.edu.pk'];
+    const emailParts = email.split('@');
+    const domain = emailParts[emailParts.length - 1];
+    if (allowedDomains.includes(domain)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
 
 export const EmailCheck =(email)=>{
     const regex = /^([a-zA-Z])(\d{2})(\d{4})@lhr\.nu\.edu\.pk$/;
@@ -5,12 +16,23 @@ export const EmailCheck =(email)=>{
     if (match) {
         return 1;
       } else {
-        console.log('Email address is not in the expected format');
-        return 0;
+        return isValidNUEmail(email);
     }      
 }
 
+
+function generateRandomString() {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    for (let i = 0; i < 30; i++) {
+      result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return result;
+  }
+
+
 export const RollExtract =(email)=>{
+
     const regex = /^([a-zA-Z])(\d{2})(\d{4})@lhr\.nu\.edu\.pk$/;
     const match = email.match(regex);
     if (match) {
@@ -18,7 +40,7 @@ export const RollExtract =(email)=>{
         return extractedString;
       } 
     else
-      return '99Z-9999'
+      return email +  generateRandomString();
 }
 
 

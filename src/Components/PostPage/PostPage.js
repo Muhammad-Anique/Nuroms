@@ -4,10 +4,6 @@ import '../LoginPage/TextBox.css'
 import CreatePostBox from './CreatePostBox'
 import '../GlobalStyles/Loader.css'
 import Post from './Post'
-
-
-
-
 function PostPage() {
 
 

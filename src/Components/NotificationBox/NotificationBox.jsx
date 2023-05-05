@@ -3,10 +3,10 @@ import './NotificationBox.css'
 import Notification from './Notification/Notification'
 import { useSelector } from 'react-redux';
 
-
-
-
 function NotificationBox() {
+
+
+  
 
   const UserProfile = useSelector((state)=>{ return state.user.data });
 
@@ -15,21 +15,22 @@ function NotificationBox() {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    // setIsLoading(true);
-    // fetch(`http://localhost:8080/nuroms/notification/get/6426d0294ad2a77dfe8bc9d2`)
-    //   .then((response) => {
-    //     return response.json();
-    //   })
-    //   .then((data) => {
-    //     setData(data);
-    //     alert(data);
-    //     console.log(data);
-    //     setIsLoading(false);
-    //   })
-    //   .catch((error) => {
-    //     setError(error);
-    //     setIsLoading(false);
-    //   });
+    setIsLoading(true)
+    async function fetchData() {
+      try {
+        const response = await fetch(`http://localhost:8080/nuroms/notification/get/${UserProfile._id}`);
+        const json = await response.json();
+        console.log("JSON Notifications  = ",json);
+        setData(json);
+        setIsLoading(false);
+      } catch (error) {
+        setError("Eroor");
+        console.error(error);
+      }
+    }
+
+    fetchData();
+    
   }, []);
 
 
@@ -53,13 +54,13 @@ function NotificationBox() {
         </div>
 
         <div className='Notification_inner_Container'>
+        {/* <Notification val={vali}/> */}
         <Initializer/>
-        <h1>{Text}</h1>
-            {/* {data.map(val=>{
+            {data.map(val=>{
             return(
                 <Notification key={val._id} val={val}/> 
             )
-            })} */}
+            })}
         </div>
         </div>
        

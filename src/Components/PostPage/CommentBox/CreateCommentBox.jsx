@@ -42,7 +42,7 @@ const CreateCommentBox = (props) => {
     const UploadComment = async()=>{
         console.log("Profiel = ",UserProfile);
         let Comment = {
-            CommenteeRoll: UserProfile.RollNo,
+            CommenteeRoll: UserProfile._id,
             PostId: props.PostId,
             CommentText: value,
             Priority: `${-9}`,

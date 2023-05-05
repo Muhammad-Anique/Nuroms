@@ -41,6 +41,13 @@
 
 }
 
+.Modal_Content>label{
+    font-size: 13px;
+    font-weight: 400;
+    margin-left: 10px;
+
+}
+
 .Modal_Button{
     display: flex;
     flex-direction: row;
@@ -87,4 +94,59 @@
     background-color: rgb(47, 47, 200);
     cursor: pointer;
 
+}
+
+
+.Label_Modal{
+    flex-direction: row;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0px;
+    margin: 0px;
+    margin-top: 5px;
+}
+.Label_Modal>p{
+    font-size: 13px;
+    font-weight: 500;
+    margin-left: 10px;
+}
+
+
+.Modal_Form{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.Form_Div{
+    height: 100%;
+    width: 100%;
+    padding-left: 10px;
+    margin: 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+
+}
+
+.OTP_div{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+.OTP_box{
+height: 50px;
+width: 40px;
+font-size: 35px;
+font-weight: 700;
+text-align: center;
+border-radius: 12px;
+margin-left: 10px;
+border: 2px solid var(--primary-color) ;
 }

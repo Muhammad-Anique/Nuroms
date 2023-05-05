@@ -189,65 +189,114 @@ function CreateRequestPage() {
     useEffect(() => {
         fetch('http://localhost:8080/nuroms/user/instructors')
           .then(response => response.json())
-          .then(data => setInstructorArray(data))
+          .then((data) => {setInstructorArray(data);
+        
+            console.log("Pichli",data);
+            const filteredArray = data.filter(item => item._id !== UserProfile._id);
+            setInstructorArray(filteredArray);
+            console.log("Agli",filteredArray);
+          })
           .catch(error => console.error(error));
+
+
+
+
       }, []);
 
 
 
     const OnSubmit =async()=>{
 
+
+        if(biddingPrice<=UserProfile.Wallet){
+            console.log(closingDate);
+            const date = new Date(closingDate);
+            date.setHours(23, 59, 0); // Set time to 11:59 PM
+            const isoClosing = date.toISOString(); // Convert to ISO datetime string in UTC time zone
+            const currentDate = new Date();
+            const isoCurrent = currentDate.toISOString();
+    
+            let Request = {
+                Topic : topic,
+                Course : course,
+                Brief : brief,
+                Duration : duration,
+                DateCreated : isoCurrent,
+                ClosingDate : isoClosing,
+                Visibility : Visibility,
+                SessionType  : sessionType,
+                BiddingPrice : biddingPrice,
+                RequestOwner  : requestOwner,
+                Instructor: Instructor,
+                Status : status
+            }
+    
+            console.log("Request",Request);
+    
+    
+            try{
+    
+                console.log("Sending");
+                const response = await fetch('http://localhost:8080/nuroms/request/add',{
+                method:'POST',
+                body:JSON.stringify(Request),
+                headers: {
+                    'Content-Type':'application/json'
+                }
+                })
+                const data = await response.json();
+
+                try{
+                    let participation ={
+                      reqId : data._id,
+                      participantId : UserProfile._id
+                   
+                    }
+                    const response2 = await fetch('http://localhost:8080/nuroms/participation/add',{
+                      method:'POST',
+                      body:JSON.stringify(participation),
+                      headers: {
+                          'Content-Type':'application/json'
+                      }
+                      })
+                      const data2 = await response2.json();
+                      console.log(data2);  
+                    }catch(error){
+                      alert(error);
+                    }
+
+
+
+
+                if(data.Error!=null){
+                    handleFailure(data.Error);
+                   
+                }
+                else
+                handleCongratulation("Your Request Is Uploaded")
+                setTimeout(() => {
+                    window.location.reload()
+                }, 5000);
+              
+                console.log(data);
+    
+    
+            }
+            catch(err){
+                handleFailure(err)
+    
+            }
+
+
+
+        }else{
+            handleFailure("Your Request cannot be sent.\n\n You dont have enough money in your wallet\n")
+
+
+        }
+    
        
-        console.log(closingDate);
-        const date = new Date(closingDate);
-        date.setHours(23, 59, 0); // Set time to 11:59 PM
-        const isoClosing = date.toISOString(); // Convert to ISO datetime string in UTC time zone
-        const currentDate = new Date();
-        const isoCurrent = currentDate.toISOString();
-
-        let Request = {
-            Topic : topic,
-            Course : course,
-            Brief : brief,
-            Duration : duration,
-            DateCreated : isoCurrent,
-            ClosingDate : isoClosing,
-            Visibility : Visibility,
-            SessionType  : sessionType,
-            BiddingPrice : biddingPrice,
-            RequestOwner  : requestOwner,
-            Instructor: Instructor,
-            Status : status
-        }
-
-        console.log("Request",Request);
-
-
-        try{
-
-            console.log("Sending");
-            const response = await fetch('http://localhost:8080/nuroms/request/add',{
-            method:'POST',
-            body:JSON.stringify(Request),
-            headers: {
-                'Content-Type':'application/json'
-            }
-            })
-            const data = await response.json();
-            if(data.Error!=null){
-                handleFailure(data.Error);
-                
-            }
-            else
-            handleCongratulation("Your Request Is Uploaded")
-            console.log(data);
-
-
-        }
-        catch(err){
-            handleFailure(err)
-
-        }
+       
       
 
     }
@@ -394,12 +443,12 @@ function CreateRequestPage() {
             <div className='TeacherContainer'>
                 <div className="TeacherBox">
                     <div className="Heading"></div>
-                    <div className='Tabs'>
+                    {/* <div className='Tabs'>
                         <button className='tab-button'>Online</button>
                         <div className='btn-Sp'></div>
                         <button className='tab-button' >All</button>
 
-                    </div>
+                    </div> */}
                     <div className="TeacherItems">
 
                     {InstructorArray.map(val=>{

@@ -3,7 +3,7 @@
     margin-left: 20px;
     margin-top: 20px;
     width: 815px;
-    height: 80px;
+    height: 90px;
     border-radius:7px ;
     display: flex;
     flex-direction: row;
@@ -14,7 +14,9 @@
 
 .Sender-Details{
     display: flex;
-    align-items: flex-start;
+    height: auto;
+    width: 100px;
+    align-items: center;
     justify-content: center;
     flex-direction: column;
     padding-left:10px ;

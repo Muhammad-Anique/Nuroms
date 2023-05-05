@@ -11,7 +11,7 @@ function Comment(props) {
 
   useEffect(() => {
     
-    fetch(`http://localhost:8080/nuroms/user/get/${props.val.CommenteeRoll}`)
+    fetch(`http://localhost:8080/nuroms/user/get/id/${props.val.CommenteeRoll}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to fetch data");

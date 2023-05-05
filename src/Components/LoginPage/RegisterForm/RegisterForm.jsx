@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import '../LoginPage.css'
 import '../TextBox.css'
 import logo from '../../../resources/Nuroms_Logo.png'
@@ -9,6 +9,8 @@ import { useDispatch } from 'react-redux'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {image} from '../../../resources/man.jpg';
+import Modal from 'react-modal';
+
 
 
 function RegisterForm(props) {
@@ -29,6 +31,7 @@ function RegisterForm(props) {
     const dispatch =useDispatch();
 
     //userDetails
+    const [isOpen, setIsOpen] = useState(false);
     const [activeCheckbox, setActiveCheckbox] = useState(null);
     const[Name,setName]=useState('');
     const[Email,SetEmail]  =useState('');
@@ -38,14 +41,52 @@ function RegisterForm(props) {
     const[Phone,setPhone]=useState('');
     const[Degree,setDegree]=useState('');
     const[UserType,setUserType]=useState(activeCheckbox);
-    const[Status,setStatus]=useState('active');
+    const[Status,setStatus]=useState('under_verfication');
     const[AccountType,setAccountType]=useState('user');
     const[OTP_, setOTP] =useState(Math.floor(Math.random() * 9000) + 1000);
 
-
-
-    const[Error, setError] = useState("")
-   
+    const[Error, setError] = useState("")   
+    const [input1, setInput1] = useState('');
+    const [input2, setInput2] = useState('');
+    const [input3, setInput3] = useState('');
+    const [input4, setInput4] = useState('');
+    const secondInput = useRef(null);
+    const thirdInput = useRef(null);
+    const fourthInput = useRef(null);
+  
+    function handleInputChange(e, inputNumber) {
+      const value = e.target.value;
+      switch (inputNumber) {
+        case 1:
+          setInput1(value);
+          if (value.length === 1) {
+            secondInput.current.focus();
+          }
+          break;
+        case 2:
+          setInput2(value);
+          if (value.length === 1) {
+            thirdInput.current.focus();
+          }
+          break;
+        case 3:
+          setInput3(value);
+          if (value.length === 1) {
+            fourthInput.current.focus();
+          }
+          break;
+        case 4:
+          setInput4(value);
+          break;
+        default:
+          break;
+      }
+    }
+  
+    function concatenate() {
+      const result = `${input1}${input2}${input3}${input4}`;
+      console.log(result); // or do something else with the result
+    }
 
 
 
@@ -55,6 +96,9 @@ function RegisterForm(props) {
     const SettingEmail=(e)=>{ SetEmail(e.target.value);}
     const SettingName=(e)=>{ setName(e.target.value);}
     const SettingDegree=(e)=>{ setDegree(e.target.value);}
+
+
+     
 
 
    const  Validate = async ()=>{
@@ -93,7 +137,21 @@ function RegisterForm(props) {
 
     }
 
-   
+    const openModalAfterValidate = async()=>{
+      const done = await Validate();
+      if(done){ handleOpenModal() }
+    }
+
+    const handleOpenModal = async() => {
+      handleRegisterSubmit();
+      setIsOpen(true);
+
+    };
+
+    const handleCloseModal = () => {
+      setIsOpen(false);
+    };
+
 
     const handleCheckboxChange = (e) => {
       const checkboxName = e.target.name;
@@ -110,6 +168,29 @@ function RegisterForm(props) {
       console.log(checkboxName);
     };
 
+
+
+    const verifyOTP = async (e) =>{
+        let User  = {
+            Email : Email,
+            otp:OTP_,
+        }
+        console.log(User);
+        console.log("Sending");
+        const response = await fetch(`http://localhost:8080/nuroms/user/update/status`,{
+        method:'PUT',
+        body:JSON.stringify(User),
+        headers: {
+            'Content-Type':'application/json'
+        }
+        })
+        const data = await response.json();
+        handleCongratulation("Your Account is Successfully Verified");
+        setTimeout(() => {
+            dispatch(setFormType(0));
+          }, 6000);
+
+    }
 
     
 
@@ -140,22 +221,38 @@ function RegisterForm(props) {
             }
             })
             const data = await response.json();
+
+
+            if(response.status==201)
+            {
+              setError("");
+              handleCongratulation("OTP is Sent To your Account");
+             
+            }
+            else
+            {
+                console.log("Account Already Exist or Network Error ");
+                setError("Account Already Exist or Network Error");
+            }
+
+
+
             let imgDoc = {
                 base64:null,
                 imgHolder:data._id,
               }
              
-                try{
-                  const response = await fetch('http://localhost:8080/nuroms/image/add',{
-                      method:'POST',
-                      body:JSON.stringify(imgDoc),
-                      headers: {
-                          'Content-Type':'application/json'
-                      }
-                      })
-          
-                  const data = await response.json();
-                  console.log(data);
+            try{
+              const response2 = await fetch('http://localhost:8080/nuroms/image/add',{
+                  method:'POST',
+                  body:JSON.stringify(imgDoc),
+                  headers: {
+                      'Content-Type':'application/json'
+                  }
+                  })
+      
+              const data2 = await response2.json();
+              console.log(data2);
                   
                   // window.location.reload();
               }catch(error)
@@ -164,19 +261,55 @@ function RegisterForm(props) {
               }
 
 
-            if(response.status==201)
-            {
-              setError("");
-              handleCongratulation("You have Successfully Registered");
-              setTimeout(() => {
-                dispatch(setFormType(0));
-              }, 6000);
-            }
-            else
-            {
-                console.log("Account Already Exist or Network Error ");
-                setError("Account Already Exist or Network Error");
-            }
+              let bio = {
+                BioText  : "No Bio Added",
+                Campus : null,
+                UserId: data._id,
+                Semester : null, 
+                Years : null,
+                Degree :  Degree,
+                UserType :  data.UserType
+              }
+
+
+
+
+              try{
+                const response3 = await fetch('http://localhost:8080/nuroms/bio/add',{
+                    method:'POST',
+                    body:JSON.stringify(bio),
+                    headers: {
+                        'Content-Type':'application/json'
+                    }
+                    })
+        
+                const data3 = await response3.json();
+                console.log(data3);
+                    
+                    // window.location.reload();
+                }catch(error)
+                {
+                    alert(error);
+                }    
+
+
+
+                let notification ={
+                  recieverId : data._id,
+                  senderId :  "64551cc5021b515552f98085",
+                  meetingLink :null,
+                  coachingTopic : null,
+                  text : `Welcome to Nuroms ! We are glad to have you on our platform`
+                 }
+            
+                  const response4 = await fetch('http://localhost:8080/nuroms/notification/add',{
+                  method:'POST',
+                  body:JSON.stringify(notification),
+                  headers: {
+                      'Content-Type':'application/json'
+                  }
+                  })
+                  const data4 = await response4.json();      
            
         }
 
@@ -242,15 +375,60 @@ function RegisterForm(props) {
 
                    
                     <div className="Login-Buttons">
-                    <button className="button-65 tp-mar-20" onClick={()=>{handleRegisterSubmit()}} >Register</button>
-                    <style>
-                        {`
-                        .Toastify__toast-container {
-                            margin-top: 20px;
-                            margin-right: 50px;
-                        }
-                        `}
-                    </style>
+                    <button className="button-65 tp-mar-20" onClick={()=>{openModalAfterValidate()}} >Verify OTP</button>
+                    <Modal
+                        isOpen={isOpen}
+                        onRequestClose={handleCloseModal}
+                        contentLabel="Report Modal"
+                        style={{
+                            overlay: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.5)'
+                            },
+                            content: {
+                            backgroundColor: '#fff',
+                            borderRadius: '10px',
+                            padding:'0px',
+                            width: '450px',
+                            height: '290px',
+                            margin: 'auto'
+                            }
+                        }}
+                        >
+
+                        <div className="Modal_Container">
+                        <div className='Modal_heading'></div>
+                        <div className="Modal_Content" style={{width:'400px', padding: '20px'}}>
+                        <h2>OTP Verification</h2>
+                        <p style={{alignSelf:'center' , fontWeight: '500' , marginBottom:'15px'}}>Verify the OTP sent your Account .</p>
+                        <form className='Modal_Form'>
+                            <div className='OTP_div'> 
+                            <input type="text" className='OTP_box' value={input1} maxLength="1" onChange={(e) => handleInputChange(e, 1)} />
+                            <input type="text" className='OTP_box' value={input2} maxLength="1" onChange={(e) => handleInputChange(e, 2)} ref={secondInput} />
+                            <input type="text" className='OTP_box' value={input3} maxLength="1" onChange={(e) => handleInputChange(e, 3)} ref={thirdInput} />
+                            <input type="text" className='OTP_box' value={input4} maxLength="1" onChange={(e) => handleInputChange(e, 4)} ref={fourthInput} onBlur={concatenate} />
+                                    
+                            </div>
+                        </form>
+                        
+                        </div>
+                        <div className="Modal_Button">
+                            <button className='Modal_Yes' onClick={()=>{verifyOTP()}}>Register</button>
+                            <button className='Modal_No' onClick={handleCloseModal}>Cancel</button>
+                        </div>
+                        <style>
+                                {`
+                                .Toastify__toast-container {
+                                    margin-top: 20px;
+                                    margin-right: 50px;
+                                }
+                                `}
+                            </style>
+
+                        <ToastContainer />
+                        </div>
+                        
+                    </Modal>
+                   
                     </div> 
 
                     <p className='LocalError'>{Error}</p>
