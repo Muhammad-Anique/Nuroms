@@ -5,6 +5,7 @@ import image from '../../resources/man.jpg'
 import PictureFrame from '../../PictureRoundFrame/PictureFrame'
 import Modal from 'react-modal';
 import { ToastContainer, toast } from 'react-toastify';
+import { useSelector } from 'react-redux'
 
 
 function CoachingRequest(props) {
@@ -13,11 +14,15 @@ function CoachingRequest(props) {
   const date = new Date(isoDateString);
   const DateCreated_= date.toLocaleDateString().split('/').join('-');;
 
+
+  const [parBit, setparBit] =useState(0);
+
   const isoDateString2 = props.val.ClosingDate;
   const date2 = new Date(isoDateString2);
   const Closingdate = date2.toLocaleDateString().split('/').join('-');;
   
   console.log("The Obj",props.val);
+  const UserProfile = useSelector((state)=>{ return state.user.data });
 
   const str = props.val.Topic;
   const words = str.split(" ");
@@ -27,8 +32,6 @@ function CoachingRequest(props) {
 
   const [insImage, setInsImage] =useState(image);
   const [ownerImage, setOwnerImage] =useState(image);
-
-
 
   const [reqOwner,setReqOwner]  =useState({});
   const [instructor, setInstructor] =useState({});
@@ -136,6 +139,11 @@ function CoachingRequest(props) {
     return(
       <p className='Acceptence_Message'>Your Request Is being Accepted wait for Instructor to generate link</p>
     )
+    else if(props.val.Status=="Closed"){
+      return(
+        <p className='Acceptence_Message'>Link = <a href="https://meet.google.com/dab-hcsp-pte">https://meet.google.com/dab-hcsp-pte</a></p>
+      )
+    }
     else
     return(
       <div style={{display : "flex", flexDirection : "row", width : "100%"}}>
@@ -195,6 +203,60 @@ function CoachingRequest(props) {
 
 
   function Request_Component_For_Owner(){
+    
+
+    function C1(){
+      const handleEnrollNow =async()=>{
+
+        let participation = {
+          reqId : props.val._id,
+          participantId  : UserProfile._id,
+        }
+          
+        
+        const response2 = await fetch(`http://localhost:8080/nuroms/participation/add`,{
+        method:'POST',
+        body:JSON.stringify(participation),
+        headers: {
+            'Content-Type':'application/json'
+        }
+        })
+        const data2 = await response2.json();
+
+        toast.success("You have Enrolled in Request", {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+
+        window.location.reload();
+
+      }
+
+      
+      if(parBit==0 && props.val.Status!="Closed")
+      return(
+        <>
+         <button className='Enroll-button' onClick={handleEnrollNow}>Enroll Now</button>
+         <ToastContainer/>
+        </>
+       
+      )
+      else if(props.val.Status!="Closed" && parBit==1)
+      return(
+        <p className='Acceptence_Message'>you have Enrolled wait for the link</p>
+      )
+      else
+      return(
+        <p className='Acceptence_Message'>The Link is <a style={{color: 'white', textDecoration:"underline"}} href='https://meet.google.com/dab-hcsp-pte'>The Link is https://meet.google.com/dab-hcsp-pte</a></p>
+      )
+    }
+
+
     if(props.bit==0)
     return(
 
@@ -203,9 +265,9 @@ function CoachingRequest(props) {
           <div className="Buy">
           <h1>Rs. {props.val.BiddingPrice}/-</h1><p>Per Student</p>
           </div>
-        
         </div>
-        <button className='Enroll-button'>Enroll Now</button>
+        <C1/>
+       {/* { <button className='Enroll-button' onClick={handleEnrollNow}>Enroll Now</button>} */}
       </div>
 
     )
@@ -254,8 +316,16 @@ function CoachingRequest(props) {
         try{
           const ParticipationResponse = await fetch(`http://localhost:8080/nuroms/participation/get/${props.val._id}`);
           const participants = await ParticipationResponse.json();
-          alert(participants.length);
           console.log("PALO PALO = ",participants);
+          const filteredData = participants.filter(item => item.participantId === UserProfile._id);
+          if(filteredData.length>0)
+          setparBit(1);
+          else 
+          setparBit(0);
+
+
+
+
           if(participants.length>=0)
           setP_Data(participants.length);
         }

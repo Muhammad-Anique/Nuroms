@@ -57,7 +57,7 @@ function MeetingLink(){
             </div>
         </div>
          <div className='Time_Note'>
-            <h6>Time : </h6><p>3:00 AM</p>
+            <h6>Time : </h6><p>{props.val.MeetingTime}</p>
          </div>
         
         
@@ -71,16 +71,17 @@ function OfferAcceptence(){
     return(
         <>
          <div className='MeetNotBox'>
-            <div className='Attr_Note'>
-            <h6>{props.val.Text}</h6>
+            <div className='Attr_Note' style={{flexDirection: 'column'}}>
+            <h6 style={{fontWeight  : 600 , alignSelf : "flex-start", marginBottom: "5px"}}>Dear {UserProfile.Name},</h6>
+            <h6 style={{marginRight :"10px"}} >{props.val.Text}</h6>
             </div>
             <div className='Attr_Note'>
               <h6>Coaching Topic : </h6><a href="">{props.val.CoachingTopic}</a>
             </div>
         </div>
-         <div className='Time_Note'>
+         {/* <div className='Time_Note'>
             <h6> Closing Date: </h6><p>{props.val.MeetingDate}</p>
-         </div>  
+         </div>   */}
         </>
        
     )

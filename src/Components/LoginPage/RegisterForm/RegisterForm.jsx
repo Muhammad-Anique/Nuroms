@@ -188,7 +188,7 @@ function RegisterForm(props) {
         handleCongratulation("Your Account is Successfully Verified");
         setTimeout(() => {
             dispatch(setFormType(0));
-          }, 6000);
+          }, 4000);
 
     }
 

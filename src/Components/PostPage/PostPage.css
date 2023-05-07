@@ -220,6 +220,11 @@
     color: white;
   }
 
+  .uploadButton:hover{
+    cursor: pointer;
+    background-color: rgb(56, 56, 221);
+  }
+
 
   .LineBreak{
     margin-top: 5px;

@@ -15,11 +15,11 @@ function ViewCoachings() {
   const [ data, setData]  =useState([]);
   const [data2, setData2] =useState([]);
   const [reqBtn, setReqBtn] = useState(0);
-  const [allBtn, setAllBtn] = useState(0);
+  const [allBtn, setAllBtn] = useState(1);
   const [sessbtn, setSessBtn] = useState(0);
 
 
-  const [ac1,setAc1] =useState('')
+  const [ac1,setAc1] =useState('Flt-Active')
   const [ac2,setAc2] =useState('')
   const [ac3,setAc3] =useState('')
 
@@ -157,7 +157,7 @@ function ViewCoachings() {
       <div className="Scrollable_Service_Container">
 
         {data2.map(val=>{
-              if(sessbtn==1 && data2.length>0)
+              if((sessbtn==1 || allBtn==1) && data2.length>0)
               return(
                   <CoachingRequest key={val._id} val={val} bit={0}/> 
               )
@@ -169,7 +169,7 @@ function ViewCoachings() {
 
 
         {data.map(val=>{
-              if(reqBtn==1 && data.length>0)
+              if((reqBtn==1 || allBtn==1)  && data.length>0)
               return(
                   <InActiveCoachingRequest key={val._id} val={val}/> 
               )

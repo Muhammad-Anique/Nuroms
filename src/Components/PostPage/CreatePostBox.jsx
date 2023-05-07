@@ -31,6 +31,7 @@ function CreatePostBox(props) {
 
 
     const UploadPost = async()=>{
+        setValue('');
         const currentDate = new Date();
         const isoDate = currentDate.toISOString();
         console.log("Profiel = ",UserProfile);

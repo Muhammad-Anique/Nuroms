@@ -145,10 +145,7 @@ function InActiveCoachingRequest(props) {
       try {
         const response = await fetch(`http://localhost:8080/nuroms/user/get/id/${props.val.RequestOwner}`);
         const json = await response.json();
-        setReqOwner(json);
-
-
-       
+        setReqOwner(json);       
           try{
             const ImgResponse = await fetch(`http://localhost:8080/nuroms/image/get/${json._id}`);
             const img = await ImgResponse.json();
@@ -162,28 +159,24 @@ function InActiveCoachingRequest(props) {
           catch(error){
             console.error(error);
           }
+
+          const ParticipationResponse = await fetch(`http://localhost:8080/nuroms/participation/get/${props.val._id}`);
+          const participants = await ParticipationResponse.json();
+          // alert(`${participants.length}`)
+          if(participants.length>0)
+          setP_Data(participants.length);
+      
      
       } catch (error) {
         console.error(error);
       }
+
     }
 
     fetchData();
   }, []);
 
 
-  useEffect(async()=>{
-    try{
-      const ParticipationResponse = await fetch(`http://localhost:8080/nuroms/participation/get/${props.val._id}`);
-      const participants = await ParticipationResponse.json();
-      if(participants.length>0)
-      setP_Data(participants.length);
-    }
-    catch(error){
-      console.error(error);
-    }
-
-  },[])
 
   useEffect(() => {
     async function fetchData() {
@@ -256,6 +249,7 @@ function InActiveCoachingRequest(props) {
 
     const [isChecked, setIsChecked] = useState(false);
     const [disabling, setdisabling] =useState('disable-bg');
+    const [Link, setLink] = useState("http:://link");
     const handleCheckboxChange = (event) => {
       setIsChecked(event.target.checked);
       if(!isChecked)
@@ -277,6 +271,47 @@ function InActiveCoachingRequest(props) {
       }
 
       const NotifyLink = async() =>{
+        try {
+
+          let notification ={
+            recieverId : reqOwner._id,
+            senderId :  UserProfile._id,
+            meetingLink :`https://meet.google.com/dab-hcsp-pte`,
+            meetingTime : toString(timeit),
+            coachingTopic : firstHalf + ' ' + secondHalf,
+            text : msgit + "Sent By" + UserProfile.Name,
+           }
+      
+            const response2 = await fetch(`http://localhost:8080/nuroms/notification/broadcast/${props.val._id}`,{
+            method:'POST',
+            body:JSON.stringify(notification),
+            headers: {
+                'Content-Type':'application/json'
+            }
+            })
+            const data2 = await response2.json();
+            handleCongratulation("THE LINK IS SENT TO ALL PARTICIPANTS");
+          
+        } catch (error) {
+          
+        }
+
+
+        try {
+          const response3 = await fetch(`http://localhost:8080/nuroms/request/closed/${props.val._id}`,{
+          method:'PUT',
+          headers: {
+              'Content-Type':'application/json'
+          }
+          })
+          const data3 = await response3.json();          
+          console.log(data3);
+        } 
+        
+        catch (error) {
+          
+        }
+        
 
       }
 
@@ -285,7 +320,15 @@ function InActiveCoachingRequest(props) {
       const handleChangeTime = (e) =>{
         settimeit(e.target.value);}
 
+        const [msgit,setmsgit] =useState(0);
+
+        const handleChangeMsgIt = (e) =>{
+          setmsgit(e.target.value);}
+
       const handleCounterOfferSubmittion = async()=>{
+
+          setCounterMsg('');
+          setCounterMsg('');
     
          
           let notification ={
@@ -309,7 +352,17 @@ function InActiveCoachingRequest(props) {
             })
   
             const data2 = await response2.json();
-            handleCongratulation("Counter offer Sent Successfully")
+            console.log(data2);
+            toast.success("Counter Offer Sent", {
+              position: 'top-right',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+           
 
       }
 
@@ -329,7 +382,7 @@ function InActiveCoachingRequest(props) {
                       <p>Set Time: </p>
                       <input   className='Time_box' value={timeit} onChange={handleChangeTime} type="time" id="t" placeholder='time' />
                   </div>
-                  <textarea   placeholder='Write Message' className='TextArea_Counter' name="" id="" cols="30" rows="2"></textarea>
+                  <textarea   placeholder='Write Message' value={msgit} onChange={handleChangeMsgIt} className='TextArea_Counter' name="" id="" cols="30" rows="2"></textarea>
                   <button  className={`Counter_button`} onClick={handleOpenModal2} >Generate Link</button>
                   <Modal
                   isOpen={isOpen2}
@@ -344,7 +397,7 @@ function InActiveCoachingRequest(props) {
                       borderRadius: '10px',
                       padding:'0px',
                       width: '450px',
-                      height: '200px',
+                      height: '250px',
                       margin: 'auto'
                     }
                   }}
@@ -354,7 +407,9 @@ function InActiveCoachingRequest(props) {
                     <div className='Modal_heading'></div>
                     <div className="Modal_Content">
                     <h2>Meeting Link</h2>
-                     <a href="">http//:google meet / 3lid 3oik d3oi3 odid o 3oi 3do3idm</a> 
+                     <a style={{color : "black", fontSize:"11px", fontWeight:"700", marginTop:"10px", textDecoration:"underline", padding:"10px"}} href="https://meet.google.com/dab-hcsp-pte"><p>https://meet.google.com/dab-hcsp-pte</p></a> 
+                     <p><b>Time : </b>{timeit}</p>
+                     <p><b>Msg : </b>{msgit}</p>
                   
                     </div>
                     <div className="Modal_Button">
@@ -398,6 +453,7 @@ function InActiveCoachingRequest(props) {
                 </div>
                 <textarea  disabled={!isChecked} value={counterMsg} onChange={handleMessageChange} placeholder='Write Message' className='TextArea_Counter' name="" id="" cols="30" rows="2"></textarea>
                 <button  disabled={!isChecked} className={`Counter_button`}  onClick={handleCounterOfferSubmittion}>Counter Offer</button>
+                <ToastContainer/>
             </div>
         </div>
       </div>
@@ -518,7 +574,7 @@ function InActiveCoachingRequest(props) {
                 </div>
                 <div className="Modal_Button">
                   <button className='Modal_Yes' onClick={()=>{handleAcceptOffer()}}>Yes</button>
-                  <button className='Modal_No' onClick={handleCloseModal}>No</button>
+                  <button className='Modal_No' onClick={handleCloseModal}>Close</button>
                 </div>
                 <style>
                 {`

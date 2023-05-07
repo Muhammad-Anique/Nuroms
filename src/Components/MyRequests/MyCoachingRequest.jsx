@@ -8,7 +8,6 @@ import {BsGridFill} from 'react-icons/bs'
 import { useSelector } from 'react-redux'
 
 
-
 function MyCoachingRequest() {
   
     const UserProfile = useSelector((state)=>{ return state.user.data })
@@ -25,8 +24,9 @@ function MyCoachingRequest() {
         return response.json();
       })
       .then((data) => {
-        setData(data);
-      
+        const filteredData = data.filter(item => item.Status !== "Closed");
+        setData(filteredData);
+       
       })
       .catch((error) => {
       });
@@ -44,7 +44,8 @@ function MyCoachingRequest() {
        return response.json();
      })
      .then((data) => {
-       setData2(data);
+      const filteredData = data.filter(item => item.Status !== "Closed");
+       setData2(filteredData);
      
      })
      .catch((error) => {
@@ -52,15 +53,37 @@ function MyCoachingRequest() {
  }, []);
 
 
+ const [data3, setData3] = useState([]);
+ useEffect(() => {
+  fetch(`http://localhost:8080/nuroms/request/get-closed/6455211ec17ae0ec92df5d4c`)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data);
+      setData3(data);
+    
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}, []);
+
+
 
     const [rcvBtn, setRcvBtn] = useState(0);
     const [allBtn, setAllBtn] = useState(1);
     const [sentbtn, setSentBtn] = useState(0);
+    const [pbtn,setpbtn] =useState(0);
   
   
     const [ac1,setAc1] =useState('Flt-Active')
     const [ac2,setAc2] =useState('')
     const [ac3,setAc3] =useState('')
+    const [ac4,setAc4] =useState('')
   
   
     const handleCoachAll=()=>{
@@ -69,21 +92,25 @@ function MyCoachingRequest() {
         setAllBtn(1);
         setRcvBtn(0);
         setSentBtn(0);
+        setpbtn(0);
   
         setAc1('Flt-Active');
         setAc2('');
         setAc3('');
+        setAc4('')
       }
       
       else{
-        setAllBtn(0);
+        setAllBtn(1);
         setRcvBtn(0);
         setSentBtn(0);
+        setpbtn(0);
   
   
-        setAc1('');
+        setAc1('Flt-Active');
         setAc2('');
         setAc3('');
+        setAc4('')
        
   
       }
@@ -96,18 +123,22 @@ function MyCoachingRequest() {
         setAllBtn(0);
         setRcvBtn(1);
         setSentBtn(0);
+        setpbtn(0);
         setAc1('');
         setAc2('');
+        setAc4('')
         setAc3('Flt-Active');
       }
       else
       {
-        setAllBtn(0);
+        setAllBtn(1);
         setRcvBtn(0);
+        setpbtn(0);
         setSentBtn(0);
-        setAc1('');
+        setAc1('Flt-Active');
         setAc2('');
         setAc3('');
+        setAc4('')
   
       }
   
@@ -121,17 +152,53 @@ function MyCoachingRequest() {
         setAllBtn(0);
         setRcvBtn(0);
         setSentBtn(1);
+        setpbtn(0);
   
   
         setAc1('');
         setAc2('Flt-Active');
         setAc3();
+        setAc4('')
         
       }else{
+        setAllBtn(1);
+        setRcvBtn(0);
+        setSentBtn(0);
+        setpbtn(0);
+  
+        setAc4('')
+        setAc1('Flt-Active');
+        setAc2('');
+        setAc3('');
+  
+      }
+  
+  
+    }
+
+
+    const handleP=()=>{
+  
+  
+      if(!sentbtn){
         setAllBtn(0);
         setRcvBtn(0);
         setSentBtn(0);
+        setpbtn(1);
   
+  
+        setAc1('');
+        setAc2('');
+        setAc3('');
+        setAc4('Flt-Active')
+        
+      }else{
+        setAllBtn(1);
+        setRcvBtn(0);
+        setSentBtn(0);
+        setpbtn(0);
+  
+        setAc4('Flt-Active')
         setAc1('');
         setAc2('');
         setAc3('');
@@ -155,7 +222,7 @@ function MyCoachingRequest() {
               <div className='Bt-sp'></div>
               <button className={`Flt-Btn ${ac3}`}   onClick={()=>{handleCoachRcv()}}  >Recieved Request</button>
               <div className='Bt-sp'></div>
-              <button className={`Flt-Btn`}>Participation Request</button>
+              <button className={`Flt-Btn  ${ac4}`} onClick={()=>{handleP()}}>Participation Request</button>
             </div>
           </div>
   
@@ -183,10 +250,21 @@ function MyCoachingRequest() {
               return(
                 <h1>No Reuest Recieved</h1>
               )
-
-
              })
         }
+
+        { data3.map(val=>{
+              if((pbtn==1 || allBtn==1) && data3.length>0)
+              return(
+                  <CoachingRequest key={val._id} val={val} bit={0}/> 
+              )
+              else if(pbtn==1 && data3.length==0)
+              return(
+                  <h1>No Req Found</h1> 
+              )
+             })
+        }
+
 
 
     

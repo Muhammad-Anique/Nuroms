@@ -59,7 +59,7 @@ function Post(props) {
 
 
     const addCommentDynammically= (newComment)=>{
-      setData([newComment,...data]);
+      setData([...data, newComment]);
     }
 
 
