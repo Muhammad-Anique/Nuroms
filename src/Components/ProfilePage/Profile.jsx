@@ -384,11 +384,7 @@ return stripePromise;
             </div>
             {/* <div className="sepe"></div> */}
             <p className='info-p'>You Need to Buy Nuroms Ruppes to Enroll in Coaching Sessions & Send Coaching Requests</p>
-        
-            
-
           </div>
-
         </div>
       
     </div>

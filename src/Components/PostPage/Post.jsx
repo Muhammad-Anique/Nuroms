@@ -73,7 +73,7 @@ function Post(props) {
           victimId:props.val.AuthorRoll,
           postId:props.val._id,
           reportType:reason
-      }
+        }
       console.log("Report to be submitted",Report);
 
       const response = await fetch('http://localhost:8080/nuroms/report-it/add',{

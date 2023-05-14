@@ -271,13 +271,17 @@ function InActiveCoachingRequest(props) {
       }
 
       const NotifyLink = async() =>{
+
+        const date2 = new Date(`2000-01-01T${timeit}:00`);
+        const timeString = date2.toLocaleTimeString();
+
         try {
 
           let notification ={
             recieverId : reqOwner._id,
             senderId :  UserProfile._id,
             meetingLink :`https://meet.google.com/dab-hcsp-pte`,
-            meetingTime : toString(timeit),
+            meetingTime : "12:00 PM",
             coachingTopic : firstHalf + ' ' + secondHalf,
             text : msgit + "Sent By" + UserProfile.Name,
            }
@@ -290,6 +294,8 @@ function InActiveCoachingRequest(props) {
             }
             })
             const data2 = await response2.json();
+
+
             handleCongratulation("THE LINK IS SENT TO ALL PARTICIPANTS");
           
         } catch (error) {
@@ -380,7 +386,7 @@ function InActiveCoachingRequest(props) {
               <div className={`Setting_Offer_Attribute`}>
                   <div className='Setter_Attribute'>
                       <p>Set Time: </p>
-                      <input   className='Time_box' value={timeit} onChange={handleChangeTime} type="time" id="t" placeholder='time' />
+                      <input   className='Time_box' value={timeit} onChange={handleChangeTime} type="time" id="myTime" placeholder='time' />
                   </div>
                   <textarea   placeholder='Write Message' value={msgit} onChange={handleChangeMsgIt} className='TextArea_Counter' name="" id="" cols="30" rows="2"></textarea>
                   <button  className={`Counter_button`} onClick={handleOpenModal2} >Generate Link</button>
@@ -407,7 +413,7 @@ function InActiveCoachingRequest(props) {
                     <div className='Modal_heading'></div>
                     <div className="Modal_Content">
                     <h2>Meeting Link</h2>
-                     <a style={{color : "black", fontSize:"11px", fontWeight:"700", marginTop:"10px", textDecoration:"underline", padding:"10px"}} href="https://meet.google.com/dab-hcsp-pte"><p>https://meet.google.com/dab-hcsp-pte</p></a> 
+                     <a style={{color : "black", fontSize:"11px", fontWeight:"700", marginTop:"10px", textDecoration:"underline", padding:"10px"}} href="https://meet.google.com/dab-hcsp-pte"><p>https://meet.google.com/yhu-spef-ert</p></a> 
                      <p><b>Time : </b>{timeit}</p>
                      <p><b>Msg : </b>{msgit}</p>
                   

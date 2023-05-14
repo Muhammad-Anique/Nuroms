@@ -122,8 +122,12 @@ function RegisterForm(props) {
                     else {
                         if(Password!==confirmPassword){
                             setError("Password Does Not Match");
-                        }else{                       
-                            return 1;
+                        }else{  
+
+                          if(Password.length<=5)
+                          setError("Password lenght must be greater than 5")
+                          else
+                          return 1;
                         }
                     }
 
@@ -375,7 +379,7 @@ function RegisterForm(props) {
 
                    
                     <div className="Login-Buttons">
-                    <button className="button-65 tp-mar-20" onClick={()=>{openModalAfterValidate()}} >Verify OTP</button>
+                    <button className="button-65 tp-mar-20" onClick={()=>{openModalAfterValidate()}} >Register</button>
                     <Modal
                         isOpen={isOpen}
                         onRequestClose={handleCloseModal}
@@ -412,7 +416,7 @@ function RegisterForm(props) {
                         
                         </div>
                         <div className="Modal_Button">
-                            <button className='Modal_Yes' onClick={()=>{verifyOTP()}}>Register</button>
+                            <button className='Modal_Yes' onClick={()=>{verifyOTP()}}>Verify OTP</button>
                             <button className='Modal_No' onClick={handleCloseModal}>Cancel</button>
                         </div>
                         <style>

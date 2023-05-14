@@ -5,15 +5,15 @@ import image from '../../resources/man.jpg'
 import PictureFrame from '../../PictureRoundFrame/PictureFrame'
 import Modal from 'react-modal';
 import { ToastContainer, toast } from 'react-toastify';
-import { useSelector } from 'react-redux'
-
+import { useDispatch, useSelector } from 'react-redux'
+import { setUser } from '../../store/slices/userSlice'
 
 function CoachingRequest(props) {
 
   const isoDateString = props.val.DateCreated;
   const date = new Date(isoDateString);
   const DateCreated_= date.toLocaleDateString().split('/').join('-');;
-
+  const dispatch =useDispatch();
 
   const [parBit, setparBit] =useState(0);
 
@@ -208,32 +208,70 @@ function CoachingRequest(props) {
     function C1(){
       const handleEnrollNow =async()=>{
 
-        let participation = {
-          reqId : props.val._id,
-          participantId  : UserProfile._id,
-        }
+        if(UserProfile.Wallet>=props.val.BiddingPrice){
+
+              try {
+                let user = {
+                    Email : UserProfile.Email,
+                    Wallet : UserProfile.Wallet - props.val.BiddingPrice
+                }
+
+                const response9 = await fetch('http://localhost:8080/nuroms/user/update/wallet',{
+                method:'PUT',
+                body:JSON.stringify(user),
+                headers: {
+                    'Content-Type':'application/json'
+                }
+                })
+                const data9 = await response9.json();
+            } catch (error) {
+                
+            }
+
+
+
+          let participation = {
+            reqId : props.val._id,
+            participantId  : UserProfile._id,
+          }
+            
           
-        
-        const response2 = await fetch(`http://localhost:8080/nuroms/participation/add`,{
-        method:'POST',
-        body:JSON.stringify(participation),
-        headers: {
-            'Content-Type':'application/json'
+          const response2 = await fetch(`http://localhost:8080/nuroms/participation/add`,{
+          method:'POST',
+          body:JSON.stringify(participation),
+          headers: {
+              'Content-Type':'application/json'
+          }
+          })
+          const data2 = await response2.json();
+  
+          toast.success("You have Enrolled in Request", {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+  
+          window.location.reload();
+
+        }else{
+          <ToastContainer/>
+          toast.failure("You Dont have Enough Money", {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+
         }
-        })
-        const data2 = await response2.json();
 
-        toast.success("You have Enrolled in Request", {
-          position: 'top-right',
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-
-        window.location.reload();
+      
 
       }
 
@@ -267,7 +305,6 @@ function CoachingRequest(props) {
           </div>
         </div>
         <C1/>
-       {/* { <button className='Enroll-button' onClick={handleEnrollNow}>Enroll Now</button>} */}
       </div>
 
     )

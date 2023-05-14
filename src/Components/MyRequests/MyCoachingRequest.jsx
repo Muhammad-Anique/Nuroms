@@ -12,7 +12,6 @@ function MyCoachingRequest() {
   
     const UserProfile = useSelector((state)=>{ return state.user.data })
 
- 
 
    const [data, setData] = useState([]);
    useEffect(() => {
@@ -55,7 +54,7 @@ function MyCoachingRequest() {
 
  const [data3, setData3] = useState([]);
  useEffect(() => {
-  fetch(`http://localhost:8080/nuroms/request/get-closed/6455211ec17ae0ec92df5d4c`)
+  fetch(`http://localhost:8080/nuroms/request/get-closed/${UserProfile._id}`)
     .then((response) => {
       if (!response.ok) {
         throw new Error("Failed to fetch data");
@@ -218,11 +217,11 @@ function MyCoachingRequest() {
             <div className="Filter-Options">
               <button className={`Flt-Btn ${ac1}`}  onClick={()=>{handleCoachAll()}}  ><BsGridFill size={20}/></button>
               <div className='Bt-sp'></div>
-              <button className={`Flt-Btn ${ac2}`}   onClick={()=>{handleCoachSent()}} >Sent Request Sent</button>
+              <button className={`Flt-Btn ${ac2}`}   onClick={()=>{handleCoachSent()}} >Sent Request</button>
               <div className='Bt-sp'></div>
               <button className={`Flt-Btn ${ac3}`}   onClick={()=>{handleCoachRcv()}}  >Recieved Request</button>
               <div className='Bt-sp'></div>
-              <button className={`Flt-Btn  ${ac4}`} onClick={()=>{handleP()}}>Participation Request</button>
+              <button className={`Flt-Btn  ${ac4}`} onClick={()=>{handleP()}}>Enrolled Session</button>
             </div>
           </div>
   

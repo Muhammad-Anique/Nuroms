@@ -13,8 +13,6 @@
     justify-content: center;
     align-items: center;
     padding: 5px;
-
-
 }
 
 .Nav-Container{
@@ -41,15 +39,46 @@
     border-radius: 100%;
     padding: 5px;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     background-color: var(--primary-color);
+}
+
+.tex{
+    font-size: 11px;
+}
+
+.non-active{
+    display: none;
 }
 
 .Nav-Item:hover{
     background-color: var(--white);
     cursor: pointer;
     color:var(--primary-color);
+}
+
+.activate{
+    background-color: var(--white);
+    cursor: pointer;
+    color:var(--primary-color);
+}
+
+
+.badge{
+    background-color: orange;
+    color: white;
+    height: 20px;
+    font-weight: 800;
+    width: 20px;
+    border-radius:100% ;
+    font-size: 13px;
+    text-align: center;
+    z-index: 99;
+    position: absolute;
+    margin-bottom: 18px;
+    margin-left: 18px;
 }
 
 
@@ -71,3 +100,5 @@
     cursor: pointer;
     color:var(--primary-color);
 }
+
+

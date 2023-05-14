@@ -3,11 +3,13 @@ import './CreateRequestpage.css'
 import { ToastContainer, toast } from 'react-toastify';
 import '../../Components/LoginPage/TextBox.css'
 import PictureFrame from '../../PictureRoundFrame/PictureFrame'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import image1 from '../../resources/man.jpg'
 
+import { setUser } from '../../store/slices/userSlice'
 
 function TeacherComponent(props){
+   
 
   
     const [image,setImage] =useState(null);
@@ -45,6 +47,7 @@ function TeacherComponent(props){
 
 
 function CreateRequestPage() {
+    const dispatch =useDispatch();
 
     const handleCongratulation = (string) => {
         toast.success(string, {
@@ -208,7 +211,27 @@ function CreateRequestPage() {
     const OnSubmit =async()=>{
 
 
-        if(biddingPrice<=UserProfile.Wallet){
+        if(biddingPrice<=UserProfile.Wallet && topic!=''){
+
+            try {
+                let user = {
+                    Email : UserProfile.Email,
+                    Wallet : UserProfile.Wallet - biddingPrice
+                }
+
+                const response9 = await fetch('http://localhost:8080/nuroms/user/update/wallet',{
+                method:'PUT',
+                body:JSON.stringify(user),
+                headers: {
+                    'Content-Type':'application/json'
+                }
+                })
+                const data9 = await response9.json();
+            } catch (error) {
+                
+            }
+
+
             console.log(closingDate);
             const date = new Date(closingDate);
             date.setHours(23, 59, 0); // Set time to 11:59 PM
@@ -290,7 +313,7 @@ function CreateRequestPage() {
 
 
         }else{
-            handleFailure("Your Request cannot be sent.\n\n You dont have enough money in your wallet\n")
+            handleFailure("Your Request cannot be sent.\n\n You dont have enough money in your wallet or invalid topic\n")
 
 
         }

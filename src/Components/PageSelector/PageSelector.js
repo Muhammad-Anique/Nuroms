@@ -8,6 +8,7 @@ import PostPage from '../PostPage/PostPage';
 import Profile from '../ProfilePage/Profile';
 import CreateRequestPage from '../CreateRequestPage/CreateRequestPage'
 import MyCoachingRequest from '../MyRequests/MyCoachingRequest';
+import './PageSelector.css'
 
 import ViewCoachings from '../ViewCoachingServices/ViewCoachings';
 import NotificationBox from '../NotificationBox/NotificationBox';
@@ -20,8 +21,8 @@ function PageSelector() {
         if(data==0){
           return(
             <div className='LoginPageLay'>
-               <LoginPage/>      
-            </div>
+                <LoginPage/>      
+            </div>           
           )
         }
         else if(data==1) {
@@ -66,6 +67,7 @@ function PageSelector() {
             </div>
           )
         }
+      
 
     }
 
