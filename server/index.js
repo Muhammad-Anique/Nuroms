@@ -19,8 +19,8 @@ const bodyParser = require('body-parser');
 main().catch(err => console.log(err));
 
 async function main() {
-  // await mongoose.connect('mongodb+srv://Anique:20l-2171@nuromscluster.usyyi7d.mongodb.net/Nuroms');
-  await mongoose.connect('mongodb://localhost:27017/');
+  await mongoose.connect('mongodb+srv://Anique:20l-2171@nuromscluster.usyyi7d.mongodb.net/Nuroms');
+  // await mongoose.connect('mongodb://localhost:27017/');
   console.log('db connected');
 }
 
@@ -44,9 +44,6 @@ server.use('/nuroms/participation/',participationRoutes);
 server.use('/nuroms/notification/', notificationRoutes);
 server.use('/nuroms/up-votes/', upVoteRoutes);
 server.use('/nuroms/report-it/', reportRoute);
-
-
-
 
 server.listen(8080, ()=>{
     console.log('server started')
