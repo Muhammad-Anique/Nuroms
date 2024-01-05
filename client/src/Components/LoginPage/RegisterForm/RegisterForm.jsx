@@ -143,7 +143,7 @@ function RegisterForm(props) {
 
     const openModalAfterValidate = async()=>{
       const done = await Validate();
-      if(done){ handleOpenModal() }
+    // if(done){ handleOpenModal() }
     }
 
     const handleOpenModal = async() => {
@@ -230,7 +230,7 @@ function RegisterForm(props) {
             if(response.status==201)
             {
               setError("");
-              handleCongratulation("OTP is Sent To your Account");
+              handleCongratulation("Your Account is Registered");
              
             }
             else
