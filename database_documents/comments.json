@@ -18,14 +18,4 @@
   "Status": "active",
   "PostId": "6456640c4e96f69bef2f83cd",
   "__v": 0
-},{
-  "_id": {
-    "$oid": "6456680edbe2fc2c7b7c948e"
-  },
-  "CommenteeRoll": "645641b568509f7257b1cda7",
-  "CommentText": "It is a good course but its very difficult.",
-  "Priority": -9,
-  "Status": "active",
-  "PostId": "6456640c4e96f69bef2f83cd",
-  "__v": 0
 }]

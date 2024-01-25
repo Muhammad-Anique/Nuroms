@@ -101,7 +101,7 @@ exports.addUser = async (req,res)=>{
         user.Name =req.body.Name;
         user.Email =req.body.Email;
         user.Degree=req.body.Degree;
-        user.Status = req.body.Status;
+        user.Status = 'active';
         user.RollNo =req.body.RollNo;
         user.OTP  =req.body.OTP;
         user.Phone  =req.body.Phone;
@@ -113,21 +113,21 @@ exports.addUser = async (req,res)=>{
         res.status(201).json(user);
 
 
-        let mailOptions = {
-            from: "Nuroms <muhammad.anique4008@gmail.com>",
-            to: `${user.Email}`,
-            subject: "OTP Verification",
-            html:`<div style="background-color: #f0f0f0; padding: 120px 320px;"><div style="background-color: #3354cc; color: #ffffff; border-radius: 5px; text-align: center;"><div style="font-size: 34px; padding: 10px; margin-left: 15px; text-align: left; font-weight: 700;">Nuroms</div><div style="display: table;vertical-align: top; margin-top: 10px; justify-content: center; align-items: center; flex-direction: column; width:100%; height:100%; background-color: #ffffff; border-radius: 0px 0px 5px 5px; padding: 40px;"><p style="font-size: 16px; color: black; margin-top: 20px;">Your One Time Password (OTP) is:</p><span style="font-size: 56px; font-weight: 700; color: #333; padding: 10px 20px; margin-top: 30px; border-radius: 5px; border: 1px solid #ccc;">${user.OTP}</span><br /><p style="font-size: 13px; margin: 20px 0 0; color: black;">This OTP is valid and verified minutes only.</p><p style="font-size: 13px; margin: 20px 0 0; color: black;">If you did not request this OTP, please ignore this email.</p><p style="font-size: 13px; margin: 20px 0 0; margin-bottom: 20px; color: black;">All rights reserved &copy; Nuroms 2023</p></div></div></div>`,
-        };
+        // let mailOptions = {
+        //     from: "Nuroms <muhammad.anique4008@gmail.com>",
+        //     to: `${user.Email}`,
+        //     subject: "OTP Verification",
+        //     html:`<div style="background-color: #f0f0f0; padding: 120px 320px;"><div style="background-color: #3354cc; color: #ffffff; border-radius: 5px; text-align: center;"><div style="font-size: 34px; padding: 10px; margin-left: 15px; text-align: left; font-weight: 700;">Nuroms</div><div style="display: table;vertical-align: top; margin-top: 10px; justify-content: center; align-items: center; flex-direction: column; width:100%; height:100%; background-color: #ffffff; border-radius: 0px 0px 5px 5px; padding: 40px;"><p style="font-size: 16px; color: black; margin-top: 20px;">Your One Time Password (OTP) is:</p><span style="font-size: 56px; font-weight: 700; color: #333; padding: 10px 20px; margin-top: 30px; border-radius: 5px; border: 1px solid #ccc;">${user.OTP}</span><br /><p style="font-size: 13px; margin: 20px 0 0; color: black;">This OTP is valid and verified minutes only.</p><p style="font-size: 13px; margin: 20px 0 0; color: black;">If you did not request this OTP, please ignore this email.</p><p style="font-size: 13px; margin: 20px 0 0; margin-bottom: 20px; color: black;">All rights reserved &copy; Nuroms 2023</p></div></div></div>`,
+        // };
         
         
-        transporter.sendMail(mailOptions, function(error, info) {
-            if (error) {
-                console.log(error);
-            } else {
-                console.log("Email sent: " + info.response);
-            }
-        });
+        // transporter.sendMail(mailOptions, function(error, info) {
+        //     if (error) {
+        //         console.log(error);
+        //     } else {
+        //         console.log("Email sent: " + info.response);
+        //     }
+        // });
       }
       
       catch (err) {
